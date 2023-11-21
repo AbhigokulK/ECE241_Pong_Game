@@ -1,4 +1,4 @@
-module fill
+module paddle_vga
 	(
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
@@ -44,6 +44,7 @@ module fill
 	// Create the colour, x, y and writeEn wires that are inputs to the controller.
 
 	wire [2:0] colour;
+	wire [2:0] y_dir;
 	wire [9:0] x;
 	wire [8:0] y;
 	wire writeEn;
@@ -92,9 +93,10 @@ module fill
 	//					oX, oY, oColour, oPlot, oDone);
 	//***** CHECK PARAMETERS!!!
 	paddle #(.X_PADDLE_SIZE('d4), .Y_PADDLE_SIZE('d20), .X_SCREEN_PIXELS('d160), .Y_SCREEN_PIXELS('d120),
-				.FRAMES_PER_UPDATE('d10), .RATE('d1)) p1
-				(.iResetn(resetn), .iClock(CLOCK_50), .iUp(SW[0], iDown(SW[1],
-				.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn), .oNewFrame(LEDR[0]));
+				.FRAMES_PER_UPDATE('d10), .RATE('d1)) 
+				p1
+				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .oyDir(y_dir),
+				.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn), .oNewFrame(LEDR[0]) );
 				
 	
 	assign LEDR[1] = writeEn;
@@ -102,9 +104,10 @@ module fill
 	assign LEDR[9:6] = KEY;
 	
 	// Output coordinates
-	hex_decoder hex0(x[3:0], HEX0);
-	hex_decoder hex1(x[7:4], HEX1);
-	hex_decoder hex2({2'b00, x[9], x[8]}, HEX2);
+	hex_decoder hex0(y_dir, HEX0);
+	//hex_decoder hex0(x[3:0], HEX0);
+	//hex_decoder hex1(x[7:4], HEX1);
+	//hex_decoder hex2({2'b00, x[9], x[8]}, HEX2);
 	
 	hex_decoder hex3(y[3:0], HEX3);
 	hex_decoder hex4(y[7:4], HEX4);

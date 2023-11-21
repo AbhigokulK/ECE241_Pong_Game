@@ -15,7 +15,7 @@
 //       Default is 160 x 120, which is size for fake_fpga and baseline for the DE1_SoC vga controller
 // CLOCKS_PER_SECOND should be the frequency of the clock being used.
 
-module paddle(iResetn, iClock, iUp, iDown, oX, oY, oColour, oPlot, oNewFrame);
+module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFrame);
 	
 	input wire 	    	iResetn;
 	input wire 	    	iClock;
@@ -25,6 +25,7 @@ module paddle(iResetn, iClock, iUp, iDown, oX, oY, oColour, oPlot, oNewFrame);
 	output wire [($clog2(Y_SCREEN_PIXELS)):0] oY;
 
 	output wire [2:0] 	oColour;     // VGA pixel colour (0-7)
+	output wire [2:0] 	oyDir;       //State
 	output wire 	     	oPlot;       // Pixel drawn enable
 	output wire       	oNewFrame;
 
@@ -72,6 +73,7 @@ module paddle(iResetn, iClock, iUp, iDown, oX, oY, oColour, oPlot, oNewFrame);
 			oX, oY, oColour, rendered, oNewFrame);
 	
 	assign oPlot = !rendered;
+	assign oyDir = y_dir;
 
 endmodule // part1
 
@@ -183,16 +185,16 @@ module control
 			end
 
 			// VERTICAL DOWN BOUNDARY HANDLING
-			if(current_state == S_DOWN) begin
-				if( y_pos > Y_MAX - RATE ) next_state <= S_STATIONARY;
-				else  if(down && !up) next_state <= S_DOWN;
+			else if(current_state == S_DOWN) begin
+				if(y_pos > Y_MAX - RATE) next_state <= (up)?S_UP:S_STATIONARY;
+				else  if(down && !up)next_state <= S_DOWN;
 				else  if(!down && up)next_state <= S_UP;
 				else next_state <= S_STATIONARY;
 			end
 
 			// VERTICAL UP BOUNDARY HANDLING
-			if(current_state == S_UP) begin
-				if( y_pos < RATE ) next_state <= S_STATIONARY;
+			else if(current_state == S_UP) begin
+				if( y_pos < RATE ) next_state <= (down)?S_DOWN:S_STATIONARY;
 				else  if(down && !up) next_state <= S_DOWN;
 				else  if(!down && up)next_state <= S_UP;
 				else next_state <= S_STATIONARY;
@@ -276,6 +278,9 @@ parameter 	SCREEN_X = 10'd640,
 	wire doneClear; 
 	wire doneDraw;
 	reg startDraw;
+	reg [($clog2(X_SET)):0] old_x;
+	reg [($clog2(Y_MAX)):0] old_y;
+
 	
 	// actually draw the ball on the updated position
 	always@(posedge clk) begin   
@@ -284,6 +289,9 @@ parameter 	SCREEN_X = 10'd640,
 			paddle_x <= X_SET;
 			paddle_y <= SCREEN_Y/2;
 
+			old_x <= X_SET;
+			old_y <= SCREEN_Y/2;
+			
 			render_x <= RATE;
 			render_y <= RATE;
 			col_out <= 3'b111;
@@ -314,7 +322,7 @@ parameter 	SCREEN_X = 10'd640,
 					// currently clearing the ball!
 					render_x <= pt_clear_x;
 					render_y <= pt_clear_y;
-					col_out <= 3'b111;
+					col_out <= 3'b000;
 					rendered <= 0;
 					frameFinished <= 0;
 					startDraw <= 1;
@@ -362,8 +370,10 @@ parameter 	SCREEN_X = 10'd640,
 				//*** frameTick == 1 was used here before, need to test if new implementation works
 				
 				if(frameTick) begin
-					if(y_dir == 2'b01) paddle_y <= (paddle_y + RATE);
-					else if(y_dir == 2'b10) paddle_y <= (paddle_y - RATE);
+					old_x <= paddle_x;
+					old_y <= paddle_y;
+					if(y_dir == 2'b01) paddle_y <= (paddle_y - RATE);
+					else if(y_dir == 2'b10) paddle_y <= (paddle_y + RATE);
 					
 				end
 			end
@@ -382,8 +392,8 @@ parameter 	SCREEN_X = 10'd640,
 		resetn,
 		frameTick,
 		
-		paddle_x, 	
-		paddle_y, 	
+		old_x, 	
+		old_y, 	
 
 		pt_clear_x,
 		pt_clear_y,
@@ -403,8 +413,8 @@ parameter 	SCREEN_X = 10'd640,
 		resetn,
 		startDraw,
 
-		ball_x,
-		ball_y,
+		paddle_x,
+		paddle_y,
 
 		pt_draw_x,
 		pt_draw_y,
