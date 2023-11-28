@@ -95,12 +95,13 @@ module paddle_vga
 	paddle #(.X_PADDLE_SIZE('d4), .Y_PADDLE_SIZE('d20), .X_SCREEN_PIXELS('d160), .Y_SCREEN_PIXELS('d120),
 				.FRAMES_PER_UPDATE('d10), .RATE('d1)) 
 				p1
-				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .oyDir(y_dir),
+				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .iUp2(SW[2]), .iDown2(SW[3]), .oyDir(y_dir),
 				.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn), .oNewFrame(LEDR[0]) );
 				
 	
 	assign LEDR[1] = writeEn;
 	assign LEDR[3:2] = SW[1:0];
+	assign LEDR[5:4] = SW[3:2];
 	assign LEDR[9:6] = KEY;
 	
 	// Output coordinates

@@ -15,17 +15,23 @@
 //       Default is 160 x 120, which is size for fake_fpga and baseline for the DE1_SoC vga controller
 // CLOCKS_PER_SECOND should be the frequency of the clock being used.
 
-module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFrame);
+module paddle(iResetn, iClock, iUp, iDown, iUp2, iDown2, oyDir, oX, oY, oColour, oPlot, oNewFrame);
 	
 	input wire 	    	iResetn;
 	input wire 	    	iClock;
+	
 	input wire 		iUp;
 	input wire		iDown;
+	input wire 		iUp2;
+	input wire		iDown2;
+
 	output wire [($clog2(X_SCREEN_PIXELS)):0] oX;         // VGA pixel coordinates
 	output wire [($clog2(Y_SCREEN_PIXELS)):0] oY;
 
+
 	output wire [2:0] 	oColour;     // VGA pixel colour (0-7)
 	output wire [2:0] 	oyDir;       //State
+
 	output wire 	     	oPlot;       // Pixel drawn enable
 	output wire       	oNewFrame;
 
@@ -36,6 +42,7 @@ module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFr
 		Y_SCREEN_PIXELS = 9'd240,  // Y screen height for starting resolution and fake_fpga (was 7*)
 		CLOCKS_PER_SECOND = 50000000, // 50 MHZ for fake_fpga (was 5KHz*)
 		X_SET = X_SCREEN_PIXELS/32,
+		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
 		Y_MAX = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE,
 
     	FRAMES_PER_UPDATE = 'd15,
@@ -46,15 +53,33 @@ module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFr
 	wire frameTick;
 	wire[($clog2(X_SET)):0] paddle_x;
 	wire[($clog2(Y_MAX)):0] paddle_y;
+	wire[($clog2(X_SET)):0] paddle_x2;
+	wire[($clog2(Y_MAX)):0] paddle_y2;
+
 	wire[($clog2(FRAMES_PER_UPDATE)):0] frameCount;
 	wire [1:0] y_dir;
+	wire [1:0] y_dir2;
+	reg enable;
 	wire rendered;
 
 	rateDivider #(CLOCKS_PER_SECOND, 
 				FRAMES_PER_UPDATE) 
 				rateDiv (iClock, iResetn, 1'b1, frameTick, frameCount);
 
-	
+
+				
+	wire [($clog2(X_SCREEN_PIXELS)):0] outX;   
+	wire [($clog2(Y_SCREEN_PIXELS)):0] outY;
+	wire [($clog2(X_SCREEN_PIXELS)):0] outX2;   
+	wire [($clog2(Y_SCREEN_PIXELS)):0] outY2;
+	wire [2:0] 	outColour;
+	wire [2:0] 	outColour2;
+	wire Plotout; 
+	wire Plotou2;	
+	wire NewFrameOut;
+	wire NewFrameOut2;
+				
+	//Paddle 1	
 	control #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_SET, Y_MAX, X_PADDLE_SIZE, Y_PADDLE_SIZE) 
 			c0 
@@ -62,7 +87,7 @@ module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFr
 			paddle_x, paddle_y,
 			iUp, iDown, y_dir);
 
-	datapath #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+			datapath #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_SET, Y_MAX,
 				X_PADDLE_SIZE, Y_PADDLE_SIZE, 
 				FRAMES_PER_UPDATE, RATE)
@@ -70,10 +95,57 @@ module paddle(iResetn, iClock, iUp, iDown, oyDir, oX, oY, oColour, oPlot, oNewFr
 			(iClock, iResetn, 1'b1,
 			frameTick, frameCount, y_dir,
 			paddle_x, paddle_y,
-			oX, oY, oColour, rendered, oNewFrame);
+			outX, outY, outColour, Plotout, NewFrameOut);
+			
+	//Paddle 2
+	control #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+				X_SET2, Y_MAX, X_PADDLE_SIZE, Y_PADDLE_SIZE) 
+			c1 
+			(iClock, iResetn, enable,
+			paddle_x2, paddle_y2,
+			iUp2, iDown2, y_dir2);
+
+	datapath #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+				X_SET2, Y_MAX,
+				X_PADDLE_SIZE, Y_PADDLE_SIZE, 
+				FRAMES_PER_UPDATE, RATE)
+			d1
+			(iClock, iResetn, !enable,
+			frameTick, frameCount, y_dir2,
+			paddle_x2, paddle_y2,
+			outX2, outY2, outColour2, Plotout1, NewFrameOut2);
+
+	reg toggle = 1'b0; 
+	always @(posedge frameTick) 
+	begin
+    		if (~iResetn) begin
+    	    	    toggle <= 1'b0;
+    		end 
+		else begin
+        	    toggle <= ~toggle;
+    		end
+	end
+
+	always @(*) begin
+    	if (toggle == 1'b0) 
+		begin
+			enable <= 1;
+		
+    	end 
 	
-	assign oPlot = !rendered;
-	assign oyDir = y_dir;
+	else 
+	begin
+			enable <= 0;
+    	end
+	end
+	
+	
+	assign oPlot = !(toggle)?Plotout1:Plotout1;
+	assign oNewFrame = (toggle)?NewFrameOut2:NewFrameOut2;
+	assign oyDir = (toggle)?y_dir:y_dir2;
+	assign oX = (toggle)?outX:outX2;
+	assign oY = (toggle)?outY:outY2;
+	assign oColour = (toggle)?outColour:outColour2;
 
 endmodule // part1
 
@@ -188,7 +260,7 @@ module control
 			else if(current_state == S_DOWN) begin
 				if(y_pos > Y_MAX - RATE) next_state <= (up)?S_UP:S_STATIONARY;
 				else  if(down && !up)next_state <= S_DOWN;
-				else  if(!down && up)next_state <= S_UP;
+				else  if(!down && up)next_s tate <= S_UP;
 				else next_state <= S_STATIONARY;
 			end
 
@@ -203,7 +275,47 @@ module control
 			else next_state <= S_STATIONARY;
 
 		end
-	end // state_table
+	end // state_table for movement
+	
+	reg[2:0] current_draw_state, next_draw_state;
+
+	// draw states
+	localparam 	S_WAIT = 3'd0,
+				S_CLEAROLD_START = 3'd1,
+				S_CLEAROLD_WAIT = 3'd2,
+				S_DRAWNEW_START = 3'd3,
+				S_DRAWNEW_WAIT = 3'd4;
+
+	// draw state table
+	always@(*)
+	begin 
+		if(!enable) begin
+			// do nothing with states...
+		end
+		
+		else begin
+			case(current_draw_state)
+
+				S_CLEAROLD_START: begin
+					// if the frame has ticked, start clearing, otherwise wait...
+					else next_draw_state <= S_CLEAROLD_WAIT;
+				end
+				S_CLEAROLD_WAIT: begin
+					// while clearing, keep clearing until it is done
+					next_draw_state <= (done_clearOld)?S_DRAWNEW_START:S_CLEAROLD_WAIT;
+				end
+
+				S_DRAWNEW_START: begin
+					else next_draw_state <= S_DRAWNEW_WAIT;
+				end
+
+				S_DRAWNEW_WAIT: begin
+					else next_draw_state <= (done_drawNew)?S_CLEAROLD_START:S_DRAWNEW_WAIT;
+				end
+
+			endcase
+		end
+	end // end of drawing state table
 
 
 	// Output logic aka all of our datapath control signals
