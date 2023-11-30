@@ -566,7 +566,7 @@ parameter 	SCREEN_X = 10'd640,
 					col_out <= 3'b111;
 					rendered <= 0;
 				end
-				if(pulse_clear2) begin
+				else if(pulse_clear2) begin
 					// output the clearOld points
 					render_x <= pt_clear_x2;
 					render_y <= pt_clear_y2;
