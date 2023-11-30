@@ -1,4 +1,4 @@
-module VGA_interface
+module Back_VGA_interface
 	(
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
@@ -155,7 +155,9 @@ module VGA_interface
 		colour,
 		writeEn
 	);
-	
+	assign LEDR[0] = SW[0];
+	assign LEDR[1] = blink;
+	assign LEDR[2] = resetn;
 endmodule
 
 module control
