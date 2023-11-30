@@ -847,7 +847,6 @@ parameter 	SCREEN_X = 10'd640,
 	assign done_blackScreen = (resetn)?blk_complete:0;
 endmodule
 
-// draw a box while an enable signal is continously given
 module drawBox_signal
 #(
 parameter 	SCREEN_X = 10'd640,
@@ -1002,4 +1001,3 @@ parameter 	SCREEN_X = 10'd640,
 		end
 	end
 endmodule
-
