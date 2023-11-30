@@ -95,7 +95,7 @@ module paddle_vga
 	paddle #(.X_PADDLE_SIZE('d4), .Y_PADDLE_SIZE('d20), .X_SCREEN_PIXELS('d160), .Y_SCREEN_PIXELS('d120),
 				.FRAMES_PER_UPDATE('d10), .RATE('d1)) 
 				p1
-				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .iUp2(SW[2]), .iDown2(SW[3]), .oyDir(y_dir),
+				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .iUp2(SW[2]), .iDown2(SW[3]),
 				.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn), .oNewFrame(LEDR[0]) );
 				
 	
@@ -105,7 +105,7 @@ module paddle_vga
 	assign LEDR[9:6] = KEY;
 	
 	// Output coordinates
-	hex_decoder hex0(y_dir, HEX0);
+	//hex_decoder hex0(y_dir, HEX0);
 	//hex_decoder hex0(x[3:0], HEX0);
 	//hex_decoder hex1(x[7:4], HEX1);
 	//hex_decoder hex2({2'b00, x[9], x[8]}, HEX2);
