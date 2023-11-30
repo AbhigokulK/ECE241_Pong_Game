@@ -1,0 +1,471 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo
+vbackground_anim
+Z1 !s110 1701367350
+!i10b 1
+!s100 z9k5gBKO`6Q;2fghZ_P@k0
+I_m4e5;SSW26XESiE;>;fJ3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 dC:/users/coolL/documents/abhischoolStuff/uniyear2/2023Fall/eCE241_Pong_Game/background_demo
+Z4 w1701367267
+Z5 8Back_VGA_interface.v
+Z6 FBack_VGA_interface.v
+L0 434
+Z7 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z8 !s108 1701367350.000000
+Z9 !s107 Back_VGA_interface.v|
+Z10 !s90 -reportprogress|300|Back_VGA_interface.v|
+!i113 1
+Z11 tCvgOpt 0
+vbackground_RAM1
+!s110 1701367314
+!i10b 1
+!s100 9=J=TgPi8b3hSHOdkLLb:1
+IRW>6lXRBBbmi>0EJ63zfo1
+R2
+R0
+Z12 w1701367040
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/background_RAM1.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/background_RAM1.v
+Z13 L0 39
+R7
+r1
+!s85 0
+31
+!s108 1701367314.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/background_RAM1.v|
+!s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/background_RAM1.v|
+!i113 1
+Z14 o-work work
+R11
+nbackground_@r@a@m1
+vborder_anim
+R1
+!i10b 1
+!s100 AnGb11OM@eKfjd0D2__8C1
+InVT5A7[gC;zo3WhP:mR<C3
+R2
+R3
+R4
+R5
+R6
+L0 348
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vborderRAM
+!s110 1701367315
+!i10b 1
+!s100 [T0>HiZ?;2NPQg1lShNhF1
+IOH5i0S>0ebRbfe3f;A;;B1
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/borderRAM.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/borderRAM.v
+R13
+R7
+r1
+!s85 0
+31
+!s108 1701367315.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/borderRAM.v|
+!s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/borderRAM.v|
+!i113 1
+R14
+R11
+nborder@r@a@m
+vcalcD0
+R1
+!i10b 1
+!s100 e68fEeb1TA30?YdaG]GnM2
+I1?L=a^7bQmZdo^UCT_IKD3
+R2
+R3
+R4
+R5
+R6
+L0 672
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d0
+vcalcD1
+R1
+!i10b 1
+!s100 _aZLRT@QMSd`HI;h73aoo2
+ITBc4l:XRTa>U_L4;a7TKA3
+R2
+R3
+R4
+R5
+R6
+L0 689
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d1
+vcalcD2
+R1
+!i10b 1
+!s100 gmfA5n70=LJR:jULI1[hl2
+IP_io^dC;>CGdH2=O6IOl_3
+R2
+R3
+R4
+R5
+R6
+L0 707
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d2
+vcalcD3
+R1
+!i10b 1
+!s100 CO51DmKan<W5ZmWg;nT[X0
+IJAKYWdIi720GOTOko4`T>0
+R2
+R3
+R4
+R5
+R6
+L0 723
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d3
+vcalcD4
+R1
+!i10b 1
+!s100 3SIP[m;Y5lkm]9V@kjLSN2
+IRo[]3emz2[hZ71W@X9]il1
+R2
+R3
+R4
+R5
+R6
+L0 740
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d4
+vcalcD5
+R1
+!i10b 1
+!s100 NgLoEmicOcIbE=HbN_M]W1
+I>QlmEE;jAKlXSRCOYa[5B0
+R2
+R3
+R4
+R5
+R6
+L0 758
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d5
+vcalcD6
+R1
+!i10b 1
+!s100 ?48nFlKPGaYKCaGYRD`m[2
+I<`E:f>3mRTCU8WefRz5030
+R2
+R3
+R4
+R5
+R6
+L0 776
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncalc@d6
+vcontrol
+R1
+!i10b 1
+!s100 ]V[8>l<YBR7ff^d@e8`_52
+I5?3aYe@F0<]XFmghI`lfA2
+R2
+R3
+R4
+R5
+R6
+L0 161
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vcountDown
+R1
+!i10b 1
+!s100 W]B^R:RCGG84oiIG@A8@82
+IObb?WPfL8QE[k7mC?lV7`2
+R2
+R3
+R4
+R5
+R6
+L0 546
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ncount@down
+vcrewmate_RAM
+!s110 1701367317
+!i10b 1
+!s100 WZboD9Vg0XeeT`f[P?@zA3
+I[H?fX_GX3668Ig^iC3bWK3
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/crewmate_RAM.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/crewmate_RAM.v
+R13
+R7
+r1
+!s85 0
+31
+!s108 1701367317.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/crewmate_RAM.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/crewmate_RAM.v|
+!i113 1
+R14
+R11
+ncrewmate_@r@a@m
+vhex_decoder
+R1
+!i10b 1
+!s100 SF>ajLCDbQOL1aHfnYC_33
+ImSeOd<0b[[JXge:[H6^SM2
+R2
+R3
+R4
+R5
+R6
+L0 643
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vholdPulse
+R1
+!i10b 1
+!s100 H;U7GNnVh4b>EY;NIUlLf0
+INL@MSH1H[UjBNUIE?Z^UY2
+R2
+R3
+R4
+R5
+R6
+L0 295
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+nhold@pulse
+vrateDivider
+R1
+!i10b 1
+!s100 XCBzAUz0:Bl4WiPzUnSZE3
+I5Kl?mIlX26EUI]Eib3i4z2
+R2
+R3
+R4
+R5
+R6
+L0 593
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+nrate@divider
+vvga_adapter
+!s110 1701367318
+!i10b 1
+!s100 2<V7moDJcN?;XAS210;_c1
+IULJY:HP3:7geZ6Oo9LFKB3
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_adapter.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_adapter.v
+L0 78
+R7
+r1
+!s85 0
+31
+!s108 1701367318.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_adapter.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_adapter.v|
+!i113 1
+R14
+R11
+vvga_address_translator
+!s110 1701367319
+!i10b 1
+!s100 C0DfW0_9[5co`@boeR]Pi1
+IiRTmC11GViN156`9i^6bc1
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_address_translator.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_address_translator.v
+L0 4
+R7
+r1
+!s85 0
+31
+!s108 1701367319.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_address_translator.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_address_translator.v|
+!i113 1
+R14
+R11
+vvga_controller
+!s110 1701367320
+!i10b 1
+!s100 e6ZP6iRSUQ77>][ahP0EJ1
+I675KdHh:S1?gc<@[Q@=BL1
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_controller.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_controller.v
+L0 9
+R7
+r1
+!s85 0
+31
+Z15 !s108 1701367320.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_controller.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_controller.v|
+!i113 1
+R14
+R11
+vVGA_interface
+R1
+!i10b 1
+!s100 ;WgLfR@fMY`R?=z05hn[_1
+IJj8m98N@FGd<Uo]X:e5d^3
+R2
+R3
+R4
+R5
+R6
+L0 1
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+n@v@g@a_interface
+vvga_pll
+!s110 1701367321
+!i10b 1
+!s100 4XSTjD`VEiamX^n1@5J`b3
+Idc>KdYe6;c<:LJA6@ColB1
+R2
+R0
+R12
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_pll.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_pll.v
+L0 36
+R7
+r1
+!s85 0
+31
+R15
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_pll.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo/vga_pll.v|
+!i113 1
+R14
+R11

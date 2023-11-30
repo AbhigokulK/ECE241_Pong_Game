@@ -1,4 +1,4 @@
-vlog VGA_interface.v
+vlog Back_VGA_interface.v
 
 vsim -L altera_mf_ver VGA_interface -gCLK_FREQ=50
 #module VGA_interface
