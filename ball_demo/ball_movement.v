@@ -89,17 +89,22 @@ module ball_movement
 				FRAMES_PER_UPDATE) 
 				rateDiv (iClock, iResetn, iEnable, frameTick, frameCount);
 
-	control #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+	control_movement #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_MAX, Y_MIN, Y_MAX, X_BOXSIZE, Y_BOXSIZE, MAX_RATE,
 				PADDLE_X, PADDLE_Y, PADDLE_OFFSET, PADDLE_MAX_Y) 
-			c0 
+			c_move
 			(iClock, iResetn, iEnable, iBlack, frameTick,
-			done_clearOld, done_drawNew, done_cleanScreen,
 			ball_x, ball_y, actual_rate,
 			lhs_paddle_y, rhs_paddle_y,
 			x_dir, y_dir,
-			clearOld_pulse, drawNew_pulse, cleanScreen_pulse,
 			lhs_score, rhs_score, boundaryHit);
+
+	control_render c_rend(
+		iClock, iResetn, iEnable, iBlack, frameTick,
+		done_clearOld, done_drawNew, done_cleanScreen,
+		(lhs_score||rhs_score),
+		clearOld_pulse, drawNew_pulse, cleanScreen_pulse
+	);
 
 	ball_physics #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_MAX, Y_MIN, Y_MAX,
@@ -195,7 +200,7 @@ module rateDivider
 endmodule
 
 
-module control
+module control_movement
 #(
 	parameter 	RATE = 1,
 				SCREEN_X = 'd640,
@@ -222,10 +227,6 @@ module control
 	input blackScreen,
 	input frameTick,
 
-	input done_clearOld,
-	input done_drawNew,
-	input done_blackScreen,
-
 	input[($clog2(X_MAX)):0] x_pos,
 	input[($clog2(Y_MAX)):0] y_pos,
 	input[($clog2(MAX_RATE)):0]	actual_rate,
@@ -235,10 +236,6 @@ module control
 
 	output reg x_dir,
 	output reg y_dir,
-
-	output reg clearOld_pulse,
-	output reg drawNew_pulse,
-	output reg blackScreen_pulse,
 	
 	output reg lhs_scored,
 	output reg rhs_scored,
@@ -373,14 +370,94 @@ module control
 		end
 	end // end of movement state table
 
+	
+	// Output logic aka all of our datapath control signals
+	always@(*)
+	begin
+		//
+		x_dir <= current_move_state[1];
+		y_dir <= current_move_state[0];	
+
+		// score stuff
+		lhs_scored <= 0;
+		rhs_scored <= 0;
+		boundary_contact <= 0;
+		case(current_score_state)
+			S_PLAY: begin
+				// no change
+			end
+
+			S_LEFT_SCORED: begin
+				lhs_scored <= 1;
+			end
+
+			S_RIGHT_SCORED: begin
+				rhs_scored <= 1;
+			end
+
+			S_BOUND_HIT: begin
+				boundary_contact <= 1;
+			end
+		endcase
+	end 
+
+
+	// set state registers to next state
+	always@(posedge clk)
+	begin 
+		if(!resetn) begin
+			// reset to be unpaused, moving down right
+			current_move_state <= 2'b11;
+			current_score_state <= S_PLAY;
+		end
+		else begin
+			current_move_state <= next_move_state;
+			current_score_state <= next_score_state;
+		end
+	end
+
+
+	// instantiate hitbox modules
+	hitDetect 	#(Y_BOXSIZE, Y_MAX,
+				PADDLE_Y, PADDLE_MAX_Y)
+		left_bound
+				(y_pos, left_paddle_pos_y, leftHit);
+
+	hitDetect 	#(Y_BOXSIZE, Y_MAX,
+				PADDLE_Y, PADDLE_MAX_Y)
+		right_bound
+				(y_pos, right_paddle_pos_y, rightHit);
+
+endmodule
+
+module control_render
+#(
+)
+(
+	input clk,
+	input resetn,
+	input enable,
+	input blackScreen,
+	input frameTick,
+
+	input done_clearOld,
+	input done_drawNew,
+	input done_blackScreen,
+	input scored,
+
+	output reg clearOld_pulse,
+	output reg drawNew_pulse,
+	output reg blackScreen_pulse
+);
+
 	reg[2:0] current_draw_state, next_draw_state;
 
 	// draw states
 	localparam 	S_WAIT = 3'd0,
-				S_CLEAROLD_START = 3'd1,
-				S_CLEAROLD_WAIT = 3'd2,
-				S_DRAWNEW_START = 3'd3,
-				S_DRAWNEW_WAIT = 3'd4,
+				S_CLEAROLD__BALL_START = 3'd1,
+				S_CLEAROLD__BALL_WAIT = 3'd2,
+				S_DRAWNEW__BALL_START = 3'd3,
+				S_DRAWNEW__BALL_WAIT = 3'd4,
 				S_BLACKSCREEN_START = 3'd5,
 				S_BLACKSCREEN_WAIT = 3'd6;
 
@@ -450,10 +527,7 @@ module control
 	// Output logic aka all of our datapath control signals
 	always@(*)
 	begin
-		//
-		x_dir <= current_move_state[1];
-		y_dir <= current_move_state[0];	
-
+	
 		// draw stuff	
 		drawNew_pulse <= 0;
 		clearOld_pulse <= 0;
@@ -484,28 +558,6 @@ module control
 				blackScreen_pulse <= 1;
 			end
 		endcase
-
-		// score stuff
-		lhs_scored <= 0;
-		rhs_scored <= 0;
-		boundary_contact <= 0;
-		case(current_score_state)
-			S_PLAY: begin
-				// no change
-			end
-
-			S_LEFT_SCORED: begin
-				lhs_scored <= 1;
-			end
-
-			S_RIGHT_SCORED: begin
-				rhs_scored <= 1;
-			end
-
-			S_BOUND_HIT: begin
-				boundary_contact <= 1;
-			end
-		endcase
 	end 
 
 
@@ -514,31 +566,13 @@ module control
 	begin 
 		if(!resetn) begin
 			// reset to be unpaused, moving down right
-			current_move_state <= 2'b11;
 			current_draw_state <= S_BLACKSCREEN_START; //*** testing clear screen upon reset first!
-			current_score_state <= S_PLAY;
 		end
 		else begin
-			current_move_state <= next_move_state;
 			current_draw_state <= next_draw_state;
-			current_score_state <= next_score_state;
 		end
 	end
-
-
-	// instantiate hitbox modules
-	hitDetect 	#(Y_BOXSIZE, Y_MAX,
-				PADDLE_Y, PADDLE_MAX_Y)
-		left_bound
-				(y_pos, left_paddle_pos_y, leftHit);
-
-	hitDetect 	#(Y_BOXSIZE, Y_MAX,
-				PADDLE_Y, PADDLE_MAX_Y)
-		right_bound
-				(y_pos, right_paddle_pos_y, rightHit);
-
 endmodule
-
 /*
 using the ball position and height, check if the top most Y and bottom most Y are in the range of the paddle Y
 
