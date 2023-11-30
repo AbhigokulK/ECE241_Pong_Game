@@ -56,8 +56,8 @@ module ball_movement
 
 		Y_MARGIN = 20,
 		Y_MIN = Y_MARGIN,
-		X_MAX = X_SCREEN_PIXELS - 1 - X_BOXSIZE - PADDLE_X - PADDLE_OFFSET, // 0-based and account for box width
-		Y_MAX = Y_SCREEN_PIXELS - 1 - Y_BOXSIZE - Y_MARGIN,
+		X_MAX = (X_SCREEN_PIXELS - 1 - X_BOXSIZE - PADDLE_X - PADDLE_OFFSET), // 0-based and account for box width
+		Y_MAX = (Y_SCREEN_PIXELS - 1 - Y_BOXSIZE - Y_MARGIN),
 
     	FRAMES_PER_UPDATE = 'd15,
     	PULSES_PER_SIXTIETH_SECOND = CLOCKS_PER_SECOND / 60,
@@ -546,7 +546,7 @@ using the ball position and height, check if the top most Y and bottom most Y ar
 module hitDetect
 #(
 parameter 	Y_BOXSIZE = 7'd4,   // Box Y dimension
-			Y_MAX = 'd480,
+			Y_MAX = 9'd480,
 			PADDLE_Y = 'd15, 	// Paddle Y dimension
 			PADDLE_MAX_Y = 'd480
 
@@ -565,9 +565,9 @@ module ball_physics
 #(
 parameter 	SCREEN_X = 10'd640,
 			SCREEN_Y = 9'd480,
-			X_MAX = 'd640,
+			X_MAX = 10'd640,
 			Y_MIN = 20,
-			Y_MAX = 'd480,
+			Y_MAX = 9'd480,
 			X_BOXSIZE = 8'd4,	// Box X dimension
 			Y_BOXSIZE = 7'd4,   // Box Y dimension
 			FRAME_RATE = 15,
@@ -672,8 +672,8 @@ module ball_render
 #(
 parameter 	SCREEN_X = 10'd640,
 			SCREEN_Y = 9'd480,
-			X_MAX = 'd640,
-			Y_MAX = 'd480,
+			X_MAX = 10'd640,
+			Y_MAX = 9'd480,
 			X_BOXSIZE = 8'd4,	// Box X dimension
 			Y_BOXSIZE = 7'd4,   // Box Y dimension
 			FRAME_RATE = 15,
@@ -834,8 +834,8 @@ parameter 	SCREEN_X = 10'd640,
 		resetn,
 		blackScreen_pulse,
 		
-		'd0, // set coordinates to be the top left most pixel to clear full screen
-		'd0,	
+		0, // set coordinates to be the top left most pixel to clear full screen
+		0,	
 
 		blk_x,
 		blk_y,
@@ -851,8 +851,8 @@ module drawBox_signal
 #(
 parameter 	SCREEN_X = 10'd640,
 			SCREEN_Y = 9'd480,
-			X_MAX = 'd640,
-			Y_MAX = 'd480,
+			X_MAX = 10'd640,
+			Y_MAX = 9'd480,
 			X_BOXSIZE = 8'd4,	// Box X dimension
 			Y_BOXSIZE = 7'd4   	// Box Y dimension
 )
@@ -934,8 +934,8 @@ module drawBox
 #(
 parameter 	SCREEN_X = 10'd640,
 			SCREEN_Y = 9'd480,
-			X_MAX = 'd640,
-			Y_MAX = 'd480,
+			X_MAX = 10'd640,
+			Y_MAX = 9'd480,
 			X_BOXSIZE = 8'd4,	// Box X dimension
 			Y_BOXSIZE = 7'd4   	// Box Y dimension
 )

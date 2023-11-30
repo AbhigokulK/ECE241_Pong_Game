@@ -1,7 +1,7 @@
 # set the working dir, where all compiled verilog goes
 vlib work
 vlog ball_movement.v
-vsim ball_movement -gX_SCREEN_PIXELS=20 -gY_SCREEN_PIXELS=15 -gCLOCKS_PER_SECOND=60 -gFRAMES_PER_UPDATE=3 -gX_BOXSIZE=2 -gY_BOXSIZE=2 -gPADDLE_Y=2 -gMAX_RATE=2 -gPADDLE_OFFSET=1 -gPADDLE_X=2
+vsim ball_movement -gX_SCREEN_PIXELS=20 -gY_SCREEN_PIXELS=15 -gCLOCKS_PER_SECOND=60 -gFRAMES_PER_UPDATE=3 -gX_BOXSIZE=2 -gY_BOXSIZE=2 -gPADDLE_Y=2 -gMAX_RATE=2 -gPADDLE_OFFSET=1 -gPADDLE_X=2 -gY_MARGIN=2
 # compile all verilog modules in mux.v to working dir
 # could also have multiple verilog files
 
