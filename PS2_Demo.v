@@ -65,7 +65,10 @@ reg			[7:0]	last_data_received;
 /*****************************************************************************
  *                         Finite State Machine(s)                           *
  *****************************************************************************/
-
+/*
+remember the bit pattern fsm example
+if we get a break signal on clock tick X then our desired key on clock tick X+1, we "let go" of our key input!
+*/
 
 /*****************************************************************************
  *                             Sequential Logic                              *
