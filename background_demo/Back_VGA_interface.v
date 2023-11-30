@@ -204,7 +204,7 @@ module control
 
 
 	background_anim #(
-		X_SIZE, Y_SIZE, 1'd1
+		X_SIZE, Y_SIZE, 1'b1
 	)
 	redrawBack(
 		clk, resetn, back_on, mux, 0, 0,
@@ -436,7 +436,7 @@ endmodule
 module background_anim
 #(
 parameter 	X_SIZE = 320,
-			Y_SIZE = 30,
+			Y_SIZE = 240,
 			IS_BACK = 1'b1,
 			TRANSPARENT = 3'b000
 			
