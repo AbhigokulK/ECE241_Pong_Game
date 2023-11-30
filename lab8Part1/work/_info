@@ -1,0 +1,526 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/users/coolL/documents/abhischoolStuff/uniyear2/2023Fall/lab8Part1
+vball_movement
+Z1 !s110 1701201491
+!i10b 1
+!s100 TSlVSX5;I7hB8Y6SgEMRm3
+IS;T2oezfPYP0PUD@2Vl?h2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 dC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/lab8Part1
+Z4 w1701195383
+Z5 8ball_movement.v
+Z6 Fball_movement.v
+L0 19
+Z7 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z8 !s108 1701201491.000000
+Z9 !s107 ball_movement.v|
+Z10 !s90 -reportprogress|300|ball_movement.v|
+!i113 1
+Z11 tCvgOpt 0
+vball_physics
+R1
+!i10b 1
+!s100 V56cISjc;;RXJRl@aR4Mj0
+ImS_9Z^HL1<]4iJE3b[jAn2
+R2
+R3
+R4
+R5
+R6
+L0 564
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vball_render
+R1
+!i10b 1
+!s100 ^4RYEej<U3Gj9PAFD;O:_0
+IV5VlKQWZzV73AJQ]Wef?;3
+R2
+R3
+R4
+R5
+R6
+L0 671
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vcalcD0
+Z12 !s110 1700774977
+!i10b 1
+!s100 0F`?ZIO;QTWH]o8OQfM>K2
+IeMCCMjl41Yeejg<zb[CdW1
+R2
+R0
+Z13 w1700773956
+Z14 8ball_vga_interface.v
+Z15 Fball_vga_interface.v
+L0 278
+R7
+r1
+!s85 0
+31
+Z16 !s108 1700774977.000000
+Z17 !s107 ball_vga_interface.v|
+Z18 !s90 -reportprogress|300|ball_vga_interface.v|
+!i113 1
+R11
+ncalc@d0
+vcalcD1
+R12
+!i10b 1
+!s100 e=5W_3o;l^Yl1nPU[E;M22
+IdbQH_0F@<kN`[@9cV78hj1
+R2
+R0
+R13
+R14
+R15
+L0 295
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d1
+vcalcD2
+R12
+!i10b 1
+!s100 ZPk7`31<FUWfLSAVTAM^h3
+IoNPHUO8F:bWJ4n4`]G<fE2
+R2
+R0
+R13
+R14
+R15
+L0 313
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d2
+vcalcD3
+R12
+!i10b 1
+!s100 H:eD3]Qd4HKNAAnWczJm<0
+IKJD9Q1z8C7Yjc<ZTU2ZXl0
+R2
+R0
+R13
+R14
+R15
+L0 329
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d3
+vcalcD4
+R12
+!i10b 1
+!s100 ]keZEWRTC<Bc_Io5n;mT^2
+I7[T69=8Kh356eUa0<zMMC0
+R2
+R0
+R13
+R14
+R15
+L0 346
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d4
+vcalcD5
+R12
+!i10b 1
+!s100 Y6Zo3JOHDb[i:P=kOziLE0
+Ig46jP7NBV@Ydc_FX^kARM0
+R2
+R0
+R13
+R14
+R15
+L0 364
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d5
+vcalcD6
+R12
+!i10b 1
+!s100 zN997OgakOfim<]EQRGf20
+IZH_oS<M[g>nOi:D]RDh8H0
+R2
+R0
+R13
+R14
+R15
+L0 382
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+ncalc@d6
+vcontrol
+R1
+!i10b 1
+!s100 MV`WgS;c`[0[[4gSdjLJ:0
+IZbfYRAY[MX9IJPRg9O2G02
+R2
+R3
+R4
+R5
+R6
+L0 198
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+vdatapath
+!s110 1700945728
+!i10b 1
+!s100 mahL2_iDM>^<lA>>gOAlX0
+IIZa66`jemB7hNM=f@Ne=D1
+R2
+R0
+w1700849673
+R5
+R6
+L0 556
+R7
+r1
+!s85 0
+31
+!s108 1700945728.000000
+R9
+R10
+!i113 1
+R11
+vdrawBox
+R1
+!i10b 1
+!s100 [N09TnEId[AmO4D;cff>]3
+IeeoeC4I5QkHo;^dP^1E^H1
+R2
+R3
+R4
+R5
+R6
+L0 934
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ndraw@box
+vdrawBox_signal
+R1
+!i10b 1
+!s100 4z86c:i;nMiAIXkcZ8Mmz2
+IV[K]@<2?2;M11Oo;;4G@b1
+R2
+R3
+R4
+R5
+R6
+L0 851
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+ndraw@box_signal
+vfill
+R12
+!i10b 1
+!s100 aiS1PAK@Cd`]^:F]c8:kF2
+IacY?omJgNHHR5W22K>9G>0
+R2
+R0
+R13
+R14
+R15
+L0 1
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+vhex_decoder
+R12
+!i10b 1
+!s100 7=`13ddzU=3HNch4Fi7G[0
+IXN2CBgQ94E>3PT``JTZ@81
+R2
+R0
+R13
+R14
+R15
+L0 249
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+vhitDetect
+R1
+!i10b 1
+!s100 d]XWEFL_?lJRQNiWCgYL]2
+IVY:>C;_?:THV:k<e:;?KS1
+R2
+R3
+R4
+R5
+R6
+L0 546
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+nhit@detect
+vholdPulse
+R12
+!i10b 1
+!s100 JiFIRiYE2Fe@UQD:2bUZW0
+I6b]7fbiLGYc48G74GdBSF0
+R2
+R0
+R13
+R14
+R15
+L0 201
+R7
+r1
+!s85 0
+31
+R16
+R17
+R18
+!i113 1
+R11
+nhold@pulse
+vpart1
+!s110 1700522803
+!i10b 1
+!s100 4^FbWM3P>?m^khcJ`To:=0
+IJL`bI2CgK`zNQTPggLKZA1
+R2
+R0
+w1700522801
+Z19 8part1.v
+Z20 Fpart1.v
+L0 18
+R7
+r1
+!s85 0
+31
+!s108 1700522803.000000
+Z21 !s107 part1.v|
+Z22 !s90 -reportprogress|300|part1.v|
+!i113 1
+R11
+vpositionCounter
+!s110 1700242722
+!i10b 1
+!s100 Lk]0AQ4d;FUMm::<b>B@72
+IeLkViMBh8<C7UBi6aaNoR2
+R2
+R0
+w1700242678
+R19
+R20
+L0 450
+R7
+r1
+!s85 0
+31
+!s108 1700242721.000000
+R21
+R22
+!i113 1
+R11
+nposition@counter
+vRateDivider
+!s110 1700106358
+!i10b 1
+!s100 b1;T[AdZe1?ODfcHiV;M23
+Il5@_fef@>O1YTdf_Kb_N:0
+R2
+R0
+w1700106356
+R19
+R20
+L0 144
+R7
+r1
+!s85 0
+31
+!s108 1700106358.000000
+R21
+R22
+!i113 1
+R11
+n@rate@divider
+vrateDivider
+R1
+!i10b 1
+!s100 :g?[A<5HJR=NC^iMTIPKi0
+ILM3NSXnWIcV?VLWIW1hLi1
+R2
+R3
+R4
+R5
+R6
+Z23 L0 147
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!i113 1
+R11
+nrate@divider
+vrender_ball
+!s110 1700673769
+!i10b 1
+!s100 Z7M;L0XOe<nim=`XLmQi>3
+IR3ScMTfl>HDk9CA`i;JE10
+R2
+R0
+w1700673658
+R5
+R6
+L0 621
+R7
+r1
+!s85 0
+31
+!s108 1700673768.000000
+R9
+R10
+!i113 1
+R11
+vscoreHandler
+Z24 !s110 1701018720
+!i10b 1
+!s100 S55kNF7JPY:CJ_Gk[IXeX1
+IS8PX83AVXfF;VDjQgWEYN1
+R2
+R0
+Z25 w1701018461
+R5
+R6
+R23
+R7
+r1
+!s85 0
+31
+Z26 !s108 1701018719.000000
+R9
+R10
+!i113 1
+R11
+nscore@handler
+vsignalToPulse
+R24
+!i10b 1
+!s100 i`AM:WZz0z;NhS_dkD]PN2
+I30F1fS9]iloO;FH4b3^cg2
+R2
+R0
+R25
+R5
+R6
+L0 182
+R7
+r1
+!s85 0
+31
+R26
+R9
+R10
+!i113 1
+R11
+nsignal@to@pulse
