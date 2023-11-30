@@ -1,6 +1,6 @@
 vlog Back_VGA_interface.v
 
-vsim -L altera_mf_ver VGA_interface -gCLK_FREQ=50
+vsim -L altera_mf_ver VGA_interface -gCLK_FREQ=500
 #module VGA_interface
 #	(
 #		CLOCK_50,						//	On Board 50 MHz
@@ -43,7 +43,7 @@ add wave -unsigned -color blue {/edgeHandler/redrawBack/*}
 
 force {CLOCK_50} 1 0, 0 {5ps} -r 10ps
 force {KEY[0]} 0
-
+force {SW[0]} 1
 run 20ps
 
 force {KEY[0]} 1

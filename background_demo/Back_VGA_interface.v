@@ -51,7 +51,7 @@ module VGA_interface
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
 	// image file (.MIF) for the controller.
-	/*
+	
 	vga_adapter VGA(
 			.resetn(resetn),
 			.clock(CLOCK_50),
@@ -59,7 +59,7 @@ module VGA_interface
 			.x(x),
 			.y(y),
 			.plot(writeEn),
-			/* Signals for the DAC to drive the monitor. *
+			/* Signals for the DAC to drive the monitor. */
 			.VGA_R(VGA_R),
 			.VGA_G(VGA_G),
 			.VGA_B(VGA_B),
@@ -71,8 +71,8 @@ module VGA_interface
 		defparam VGA.RESOLUTION = "320x240";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-		defparam VGA.BACKGROUND_IMAGE = "image_colour.mif";
-	*/
+		defparam VGA.BACKGROUND_IMAGE = "stars_colour.mif";
+	
 	// Put your code here. Your code should produce signals x,y,colour and writeEn
 	// for the VGA controller, in addition to any other functionality your design may require.
 	

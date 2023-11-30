@@ -9,13 +9,13 @@ z2
 cModel Technology
 Z0 dC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/background_demo
 vbackground_anim
-Z1 !s110 1701367350
+Z1 !s110 1701369231
 !i10b 1
 !s100 z9k5gBKO`6Q;2fghZ_P@k0
 I_m4e5;SSW26XESiE;>;fJ3
 Z2 VDg1SIo80bB@j0V0VzS_@n1
 Z3 dC:/users/coolL/documents/abhischoolStuff/uniyear2/2023Fall/eCE241_Pong_Game/background_demo
-Z4 w1701367267
+Z4 w1701368246
 Z5 8Back_VGA_interface.v
 Z6 FBack_VGA_interface.v
 L0 434
@@ -23,7 +23,7 @@ Z7 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z8 !s108 1701367350.000000
+Z8 !s108 1701369231.000000
 Z9 !s107 Back_VGA_interface.v|
 Z10 !s90 -reportprogress|300|Back_VGA_interface.v|
 !i113 1
@@ -430,8 +430,8 @@ R11
 vVGA_interface
 R1
 !i10b 1
-!s100 ;WgLfR@fMY`R?=z05hn[_1
-IJj8m98N@FGd<Uo]X:e5d^3
+!s100 UQndWhiB<MR;D:=G]<X@j2
+IQJ]7GW3MXWjFAWYM5oK`60
 R2
 R3
 R4
