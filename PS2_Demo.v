@@ -46,7 +46,7 @@ output		[6:0]	HEX4;
 output		[6:0]	HEX5;
 output		[6:0]	HEX6;
 output		[6:0]	HEX7;
-output reg  [9:0] LEDR;
+output reg	[9:0]	LEDR;
 
 /*****************************************************************************
  *                 Internal Wires and Registers Declarations                 *
@@ -55,7 +55,7 @@ output reg  [9:0] LEDR;
 // Internal Wires
 wire		[7:0]	ps2_key_data;
 wire				ps2_key_pressed;
-
+wire           send_command;
 
 // Internal Registers
 reg			[7:0]	last_data_received;
@@ -73,9 +73,8 @@ reg			[7:0]	last_data_received;
 
 always @(posedge CLOCK_50)
 begin
-	LEDR[0] <= (ps2_key_pressed)? 1'b1 : 1'b0;
 	if (KEY[0] == 1'b0)
-		last_data_received <= 8'h00;
+		last_data_received <= 8'b00;
 	else if (ps2_key_pressed == 1'b1) begin
 		last_data_received <= ps2_key_data;
 	end
@@ -84,13 +83,11 @@ begin
 	begin
 		LEDR[9] <= 1'b1;
 	end
-	
 	else begin
 		LEDR[9] <= 1'b0;
-	end
-	
-
+	end	
 end
+
 
 /*****************************************************************************
  *                            Combinational Logic                            *

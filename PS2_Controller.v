@@ -39,7 +39,7 @@ input			CLOCK_50;
 input			reset;
 
 input	[7:0]	the_command;
-input			send_command;
+inout			send_command;
 
 // Bidirectionals
 inout			PS2_CLK;
@@ -110,7 +110,7 @@ reg		[2:0]	s_ps2_transceiver;
 /*****************************************************************************
  *                         Finite State Machine(s)                           *
  *****************************************************************************/
-
+ 
 always @(posedge CLOCK_50)
 begin
 	if (reset == 1'b1)
@@ -126,7 +126,8 @@ begin
 
     case (s_ps2_transceiver)
 	PS2_STATE_0_IDLE:
-		begin
+		begin	
+		
 			if ((idle_counter == 8'hFF) && 
 					(send_command == 1'b1))
 				ns_ps2_transceiver = PS2_STATE_2_COMMAND_OUT;
@@ -137,6 +138,7 @@ begin
 		end
 	PS2_STATE_1_DATA_IN:
 		begin
+		
 			if ((received_data_en == 1'b1)/* && (ps2_clk_posedge == 1'b1)*/)
 				ns_ps2_transceiver = PS2_STATE_0_IDLE;
 			else
@@ -170,7 +172,8 @@ begin
 			end
 			else
 				ns_ps2_transceiver = PS2_STATE_4_END_DELAYED;
-		end	
+		end
+		
 	default:
 			ns_ps2_transceiver = PS2_STATE_0_IDLE;
 	endcase
