@@ -35,12 +35,12 @@ module paddle(iResetn, iClock, iUp, iDown, iUp2, iDown2, oX, oY, oColour, oPlot,
 	output wire       	oNewFrame;
 
    	parameter 
-		X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
-		Y_PADDLE_SIZE = 7'd40,   // Paddle Y dimension
+		X_PADDLE_SIZE = 8'd7,   // Paddle X dimension
+		Y_PADDLE_SIZE = 7'd50,   // Paddle Y dimension
 		X_SCREEN_PIXELS = 10'd320,  // X screen width for starting resolution and fake_fpga (was 9*)
 		Y_SCREEN_PIXELS = 9'd240,  // Y screen height for starting resolution and fake_fpga (was 7*)
 		CLOCKS_PER_SECOND = 50000000, // 50 MHZ for fake_fpga (was 5KHz*)
-		X_SET = X_SCREEN_PIXELS/32,
+		X_SET = X_PADDLE_SIZE,
 		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
 		Y_MAX = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE,
 
