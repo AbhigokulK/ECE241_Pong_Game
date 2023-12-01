@@ -73,14 +73,28 @@ if we get a break signal on clock tick X then our desired key on clock tick X+1,
 /*****************************************************************************
  *                             Sequential Logic                              *
  *****************************************************************************/
-
+reg escape;
+ 
 always @(posedge CLOCK_50)
 begin
 	if (KEY[0] == 1'b0)
-		last_data_received <= 8'b00;
-	else if (ps2_key_pressed == 1'b1) begin
+		last_data_received <= 8'b0;
+		
+	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
 		last_data_received <= ps2_key_data;
+		escape <= 1'b0;
 	end
+	
+	else if(ps2_key_data == 8'hF0)
+	begin
+		escape <= 1'b1;
+	end
+	
+	if(escape == 1'b1)
+	begin
+		last_data_received <= 8'b0;
+	end
+	
 	
 	if(last_data_received == 8'd29)
 	begin
@@ -89,6 +103,14 @@ begin
 	else begin
 		LEDR[9] <= 1'b0;
 	end	
+	
+	if(last_data_received == 8'd27)
+	begin
+		LEDR[8] <= 1'b1;
+	end
+	else begin
+		LEDR[8] <= 1'b0;
+	end
 end
 
 
