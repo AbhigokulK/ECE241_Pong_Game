@@ -40,7 +40,7 @@ module paddle(iResetn, iClock, iUp, iDown, iUp2, iDown2, oX, oY, oColour, oPlot,
 		X_SCREEN_PIXELS = 10'd320,  // X screen width for starting resolution and fake_fpga (was 9*)
 		Y_SCREEN_PIXELS = 9'd240,  // Y screen height for starting resolution and fake_fpga (was 7*)
 		CLOCKS_PER_SECOND = 50000000, // 50 MHZ for fake_fpga (was 5KHz*)
-		X_SET = X_PADDLE_SIZE,
+		X_SET = 8'd5,
 		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
 		Y_MAX = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE,
 
@@ -196,8 +196,8 @@ endmodule
 module control
 #(
 	parameter 	RATE = 1,
-				SCREEN_X = 'd640,
-				SCREEN_Y = 'd480,
+				SCREEN_X = 'd320,
+				SCREEN_Y = 'd240,
 				X_SET = 'd10,
 				Y_MAX = 'd480,
 				X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
@@ -279,8 +279,8 @@ endmodule
 module renderControl
 #(
 	parameter 	RATE = 1,
-				SCREEN_X = 'd640,
-				SCREEN_Y = 'd480,
+				SCREEN_X = 'd320,
+				SCREEN_Y = 'd240,
 				X_SET = 'd10,
 				Y_MAX = 'd480,
 				X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
