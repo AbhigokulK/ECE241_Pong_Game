@@ -2,8 +2,14 @@ module paddle_vga
 	(
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
+		
 		KEY,							// On Board Keys
 		SW, 							//* on Board Switches
+
+		// Bidirectionals
+		PS2_CLK,
+		PS2_DAT,
+		
 		LEDR,							//* on Board LEDs (for debugging)
 		HEX0,
 		HEX1,
@@ -25,6 +31,9 @@ module paddle_vga
 	input			CLOCK_50;				//	50 MHz
 	input	[3:0]	KEY;			
 	input [9:0] SW;						//*
+	// Bidirectionals
+	inout				PS2_CLK;
+	inout				PS2_DAT;
 	output [9:0] LEDR;					//*
 	output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	// Declare your inputs and outputs here
@@ -48,6 +57,14 @@ module paddle_vga
 	wire [9:0] x;
 	wire [8:0] y;
 	wire writeEn;
+	
+	// Internal Wires
+	wire		[7:0]	ps2_key_data;
+	wire				ps2_key_pressed;
+	wire           send_command;
+
+// Internal Registers
+	reg			[7:0]	last_data_received;
 
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
@@ -68,7 +85,7 @@ module paddle_vga
 			.VGA_BLANK(VGA_BLANK_N),
 			.VGA_SYNC(VGA_SYNC_N),
 			.VGA_CLK(VGA_CLK));
-		defparam VGA.RESOLUTION = "160x120";
+		defparam VGA.RESOLUTION = "320x240";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
 		defparam VGA.BACKGROUND_IMAGE = "black.mif";
@@ -88,34 +105,92 @@ module paddle_vga
 	oX[9:0] -> HEX2, 1, 0
 	oY[8:0] -> HEX3, 4, 5
 	*/
+	reg iUp, iDown;
+	
+	reg escape;
+ 
+	always @(posedge CLOCK_50)
+	begin
+	if (KEY[0] == 1'b0)
+		last_data_received <= 8'b0;
+		
+	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+		last_data_received <= ps2_key_data;
+		escape <= 1'b0;
+	end
+	
+	else if(ps2_key_data == 8'hF0)
+	begin
+		escape <= 1'b1;
+	end
+	
+	if(escape == 1'b1)
+	begin
+		last_data_received <= 8'b0;
+	end
+	
+	
+	if(last_data_received == 8'd29)
+	begin
+		iUp <= 1'b1;
+	end
+	else begin
+		iUp <= 1'b0;
+	end	
+	
+	if(last_data_received == 8'd27)
+	begin
+		iDown <= 1'b1;
+	end
+	else begin
+		iDown <= 1'b0;
+	end
+end
+	
+	
 
 	//module part2(iResetn, iPlotBox, iBlack, iColour, iLoadX, iXY_Coord, iClock,
 	//					oX, oY, oColour, oPlot, oDone);
 	//***** CHECK PARAMETERS!!!
-	paddle #(.X_PADDLE_SIZE('d4), .Y_PADDLE_SIZE('d20), .X_SCREEN_PIXELS('d160), .Y_SCREEN_PIXELS('d120),
-				.FRAMES_PER_UPDATE('d10), .RATE('d1)) 
+	paddle #(.X_PADDLE_SIZE('d7), .Y_PADDLE_SIZE('d50), .X_SCREEN_PIXELS('d320), .Y_SCREEN_PIXELS('d240),
+				.FRAMES_PER_UPDATE('d30), .RATE('d3)) 
 				p1
-				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(SW[0]), .iDown(SW[1]), .iUp2(SW[2]), .iDown2(SW[3]),
+				(.iResetn(resetn), .iClock(CLOCK_50) , .iUp(iUp), .iDown(iDown), .iUp2(SW[9]), .iDown2(SW[0]),
 				.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn), .oNewFrame(LEDR[0]) );
 				
 	
-	assign LEDR[1] = writeEn;
-	assign LEDR[3:2] = SW[1:0];
-	assign LEDR[5:4] = SW[3:2];
-	assign LEDR[9:6] = KEY;
+	//assign LEDR[1] = writeEn;
+	assign LEDR[1] = iDown;
+	assign LEDR[2] = iUp;
+	assign LEDR[3] = SW[0];
+	assign LEDR[4] = SW[9];
+	assign LEDR[5] = KEY[0];
 	
 	// Output coordinates
 	//hex_decoder hex0(y_dir, HEX0);
 	//hex_decoder hex0(x[3:0], HEX0);
-	//hex_decoder hex1(x[7:4], HEX1);
-	//hex_decoder hex2({2'b00, x[9], x[8]}, HEX2);
+	hex_decoder hex0(last_data_received[3:0], HEX0);
+	hex_decoder hex1(last_data_received[7:4], HEX1);
+	hex_decoder hex2(y[3:0], HEX2);
+	hex_decoder hex3(y[7:4], HEX3);
+
 	
-	hex_decoder hex3(y[3:0], HEX3);
-	hex_decoder hex4(y[7:4], HEX4);
-	hex_decoder hex5({3'b000, y[8]}, HEX5);
+	PS2_Controller PS2 (
+	// Inputs
+	.CLOCK_50				(CLOCK_50),
+	.reset				(~KEY[0]),
+
+	// Bidirectionals
+	.PS2_CLK			(PS2_CLK),
+ 	.PS2_DAT			(PS2_DAT),
+
+	// Outputs
+	.received_data		(ps2_key_data),
+	.received_data_en	(ps2_key_pressed)
+	);
+	
 	
 endmodule
-
 
 
 
