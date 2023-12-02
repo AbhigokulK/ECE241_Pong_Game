@@ -93,25 +93,24 @@ R9
 R10
 R11
 vcontrol_render
-R1
+Z12 !s110 1701491437
 !i10b 1
-!s100 EFSPW^9EOAhSd151Um2[n0
-IXFmQQk2KO2U^<7>UQ:g>71
+!s100 TaD9lU_2PlnN`Z`TfF^=Q2
+I:`]?Nm^J4Tm:BGgFSRbQ62
 R2
-R0
-R3
-R4
-R5
-L0 202
+Z13 dC:/users/coolL/documents/abhischoolStuff/uniyear2/2023Fall/ece241_Pong_Game/Pong_Files
+Z14 w1701491002
+Z15 8pong.v
+Z16 Fpong.v
+L0 223
 R6
 r1
 !s85 0
 31
-R7
-R8
-R9
+Z17 !s108 1701491437.000000
+Z18 !s107 pong.v|
+Z19 !s90 -reportprogress|300|pong.v|
 !i113 1
-R10
 R11
 vdrawBox_signal
 R1
@@ -200,25 +199,24 @@ R9
 R10
 R11
 vpong_game
-R1
+R12
 !i10b 1
-!s100 ;czHnb`?LZ@0EZ85>9X3d3
-Iocl:flBE]W4L:dHP]O]HU1
+!s100 Wl6jWG:KYQMM0:k`<]7693
+IA@IO8Z2HbbZNc9e@MES@I2
 R2
-R0
-R3
-R4
-R5
+R13
+R14
+R15
+R16
 L0 1
 R6
 r1
 !s85 0
 31
-R7
-R8
-R9
+R17
+R18
+R19
 !i113 1
-R10
 R11
 vrateDivider
 R1
@@ -242,3 +240,66 @@ R9
 R10
 R11
 nrate@divider
+vvga_address_translator
+!s110 1701490220
+!i10b 1
+!s100 C0DfW0_9[5co`@boeR]Pi1
+I=lI@VnIUJCmgE1Kz[koOC2
+R2
+R0
+Z20 w1701367509
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_address_translator.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_address_translator.v
+L0 4
+R6
+r1
+!s85 0
+31
+!s108 1701490220.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_address_translator.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_address_translator.v|
+!i113 1
+R10
+R11
+vvga_controller
+!s110 1701490219
+!i10b 1
+!s100 e6ZP6iRSUQ77>][ahP0EJ1
+I<EJn<P`gjLO^9UmFn]J7B3
+R2
+R0
+R20
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_controller.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_controller.v
+L0 9
+R6
+r1
+!s85 0
+31
+!s108 1701490219.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_controller.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_controller.v|
+!i113 1
+R10
+R11
+vvga_pll
+!s110 1701490218
+!i10b 1
+!s100 4XSTjD`VEiamX^n1@5J`b3
+IVUjN>el?^U4DbJYmSl8NE3
+R2
+R0
+R20
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_pll.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_pll.v
+L0 36
+R6
+r1
+!s85 0
+31
+!s108 1701490218.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_pll.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/Pong_Files/vga_pll.v|
+!i113 1
+R10
+R11
