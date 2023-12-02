@@ -314,20 +314,19 @@ module ball_physics
 			end
 			else begin
 				// actually move the ball on a frame tick!
-				//*** frameTick == 1 was used here before, need to test if new implementation works
 				if(frameTick) begin
 					old_x <= ball_x;
 					old_y <= ball_y;
-					if(blackScreen_pulse) begin
-						// reset ball position upon black screening
-						ball_x <= resetPos_X;
-						ball_y <= resetPos_Y;
-					end
-					else begin
-						// otherwise, just update the ball!
-						ball_x <= (x_dir)?(ball_x + actual_rate):(ball_x - actual_rate);
-						ball_y <= (y_dir)?(ball_y + actual_rate):(ball_y - actual_rate);
-					end
+						
+					// otherwise, just update the ball!
+					ball_x <= (x_dir)?(ball_x + actual_rate):(ball_x - actual_rate);
+					ball_y <= (y_dir)?(ball_y + actual_rate):(ball_y - actual_rate);
+				end
+				// after moving the ball, if blackScreen pulse was sent (regardless of whether it was a frame or not), reset
+				if(blackScreen_pulse) begin
+					// reset ball position upon black screening
+					ball_x <= resetPos_X;
+					ball_y <= resetPos_Y;
 				end
 			end
 		end
