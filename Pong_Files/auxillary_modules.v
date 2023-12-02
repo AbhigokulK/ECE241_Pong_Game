@@ -3,6 +3,8 @@
 *******************************************************
 Auxillary Modules
 
+scoreHandler - takes in score signals and keeps track of points!
+
 signalToPulse - converts a long signal into a single pulse
 	Inputs:
 		clk
@@ -80,6 +82,40 @@ drawBox_signal_paddle
 *******************************************************
 =======================================================
 */
+
+
+module scoreHandler
+#(
+	parameter MAX_SCORE = 5
+)
+(
+	input clk,
+	input resetn,
+	input lhs_scored, 
+	input rhs_scored,
+	output reg [($clog2(MAX_SCORE)):0] lhs_score_count,
+	output reg [($clog2(MAX_SCORE)):0] rhs_score_count
+);	
+
+	wire lhs_pulse, rhs_pulse;
+	always@(posedge clk)
+	begin
+		if(!resetn) begin
+			lhs_score_count <= 0;
+			rhs_score_count <= 0;
+		end
+		else begin
+			if(lhs_pulse) begin
+				lhs_score_count <= lhs_score_count + 1;
+			end
+			else if(rhs_pulse) begin
+				rhs_score_count <= rhs_score_count + 1;
+			end
+		end
+	end
+	signalToPulse left_pulse(clk, resetn, lhs_scored, lhs_pulse);
+	signalToPulse right_pulse(clk, resetn, rhs_scored, rhs_pulse);
+endmodule
 
 // converts a continous signal into a single pulse
 // only fails when the signal happens to rise with the clock and fall before the next posedge
