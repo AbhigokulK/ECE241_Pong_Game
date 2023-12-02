@@ -87,9 +87,9 @@ module ball_movement
 
 	rateDivider #(CLOCKS_PER_SECOND, 
 				FRAMES_PER_UPDATE) 
-				rateDiv (iClock, iResetn, iEnable, frameTick, frameCount);
+				frameHandler (iClock, iResetn, iEnable, frameTick, frameCount);
 
-	control_movement #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+	control_ball_movement #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_MAX, Y_MIN, Y_MAX, X_BOXSIZE, Y_BOXSIZE, MAX_RATE,
 				PADDLE_X, PADDLE_Y, PADDLE_OFFSET, PADDLE_MAX_Y) 
 			c_move
@@ -98,14 +98,14 @@ module ball_movement
 			lhs_paddle_y, rhs_paddle_y,
 			x_dir, y_dir,
 			lhs_score, rhs_score, boundaryHit);
-
+	/*
 	control_render c_rend(
 		iClock, iResetn, iEnable, iBlack, frameTick,
 		done_clearOld, done_drawNew, done_cleanScreen,
 		(lhs_score||rhs_score),
 		clearOld_pulse, drawNew_pulse, cleanScreen_pulse
 	);
-
+	*/
 	ball_physics #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_MAX, Y_MIN, Y_MAX,
 				X_BOXSIZE, Y_BOXSIZE, 
@@ -200,7 +200,7 @@ module rateDivider
 endmodule
 
 
-module control_movement
+module control_ball_movement
 #(
 	parameter 	RATE = 1,
 				SCREEN_X = 'd640,
@@ -597,20 +597,20 @@ endmodule
 
 module ball_physics
 #(
-parameter 	SCREEN_X = 10'd640,
-			SCREEN_Y = 9'd480,
-			X_MAX = 10'd640,
-			Y_MIN = 20,
-			Y_MAX = 9'd480,
-			X_BOXSIZE = 8'd4,	// Box X dimension
-			Y_BOXSIZE = 7'd4,   // Box Y dimension
-			FRAME_RATE = 15,
-			RATE = 1,
-			MAX_RATE = 15,
-			TIME_TILL_ACCEL = 'd2,
-			PADDLE_WIDTH = 'd4,
-			PADDLE_HEIGHT = 'd15,
-			PADDLE_OFFSET = 'd2	
+	parameter 	SCREEN_X = 10'd640,
+				SCREEN_Y = 9'd480,
+				X_MAX = 10'd640,
+				Y_MIN = 20,
+				Y_MAX = 9'd480,
+				X_BOXSIZE = 8'd4,	// Box X dimension
+				Y_BOXSIZE = 7'd4,   // Box Y dimension
+				FRAME_RATE = 15,
+				RATE = 1,
+				MAX_RATE = 15,
+				TIME_TILL_ACCEL = 'd2,
+				PADDLE_WIDTH = 'd4,
+				PADDLE_HEIGHT = 'd15,
+				PADDLE_OFFSET = 'd2	
 )
 (
 	input clk,
@@ -704,15 +704,15 @@ endmodule
 
 module ball_render
 #(
-parameter 	SCREEN_X = 10'd640,
-			SCREEN_Y = 9'd480,
-			X_MAX = 10'd640,
-			Y_MAX = 9'd480,
-			X_BOXSIZE = 8'd4,	// Box X dimension
-			Y_BOXSIZE = 7'd4,   // Box Y dimension
-			FRAME_RATE = 15,
-			RATE = 1,
-			MAX_RATE = 15
+	parameter 	SCREEN_X = 10'd640,
+				SCREEN_Y = 9'd480,
+				X_MAX = 10'd640,
+				Y_MAX = 9'd480,
+				X_BOXSIZE = 8'd4,	// Box X dimension
+				Y_BOXSIZE = 7'd4,   // Box Y dimension
+				FRAME_RATE = 15,
+				RATE = 1,
+				MAX_RATE = 15
 )
 (
 	input clk,
@@ -883,12 +883,12 @@ endmodule
 
 module drawBox_signal
 #(
-parameter 	SCREEN_X = 10'd640,
-			SCREEN_Y = 9'd480,
-			X_MAX = 10'd640,
-			Y_MAX = 9'd480,
-			X_BOXSIZE = 8'd4,	// Box X dimension
-			Y_BOXSIZE = 7'd4   	// Box Y dimension
+	parameter 	SCREEN_X = 10'd640,
+				SCREEN_Y = 9'd480,
+				X_MAX = 10'd640,
+				Y_MAX = 9'd480,
+				X_BOXSIZE = 8'd4,	// Box X dimension
+				Y_BOXSIZE = 7'd4   	// Box Y dimension
 )
 (
 	input clk,
