@@ -4,6 +4,16 @@
 Auxillary Modules
 
 scoreHandler - takes in score signals and keeps track of points!
+	Parameter:
+		max score
+	Inputs:
+		clk
+		resetn
+		lhs_scored (pulse)
+		rhs_scored (pulse)
+	Outputs:
+		reg [($clog2(MAX_SCORE)):0] lhs_score_count
+		reg [($clog2(MAX_SCORE)):0] rhs_score_count
 
 signalToPulse - converts a long signal into a single pulse
 	Inputs:
