@@ -30,10 +30,10 @@ module pong_game(
 		CLOCKS_PER_SECOND = 50000000, // 50 MHZ for fake_fpga (was 5KHz*)
 		X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
 		Y_PADDLE_SIZE = 7'd40,   // Paddle Y dimension
-		Y_MARGIN = 20,
+		Y_MARGIN = 30,
 
 		// game physics parameters
-		FRAMES_PER_UPDATE = 'd15,
+		FRAMES_PER_UPDATE = 'd60,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
 		PADDLE_RATE = 'd3,
@@ -165,7 +165,6 @@ module pong_game(
 
 
 	wire done_background = 1'b1;
-	wire done_border = 1'b1;
 	wire draw_background_pulse, draw_border_pulse;
 
 	control_render #(MAX_SCORE)
@@ -216,8 +215,29 @@ module pong_game(
 			done_draw2, out_paddle_x, out_paddle_y, out_col_paddle, plot_paddle);
 	
 
+
+	// Border Rendering
+	wire [2:0] border_colour;
+	wire [($clog2(X_SCREEN_PIXELS)):0] border_x;
+	wire [($clog2(Y_MARGIN)):0] border_y;
+	wire border_plot;
+
+	border_anim  #(
+		X_SCREEN_PIXELS, Y_MARGIN
+	)
+	drawBorder(
+		clk, resetn, draw_border_pulse, 'd0, 'd0,
+		border_x, border_y, border_colour, border_plot, done_border
+	);
+
+
+
 	always@(*) begin
-		if(draw_background_pulse || draw_border_pulse) begin
+		if(draw_border_pulse) begin
+			oX <= border_x;
+			oY <= border_y;
+			oColour <= border_colour;
+			rednered <= border_plot;
 		end
 		else if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
 			oX <= out_ball_x;
@@ -355,7 +375,7 @@ module control_render #(
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
                     else begin
                         // if anyone's score is above the warning level display the warning!
-                        if(rhs_score > WARNING_LEVEL || lhs_score > WARNING_LEVEL) begin
+                        if((rhs_score > WARNING_LEVEL || lhs_score > WARNING_LEVEL)) begin
                             next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
                         end    
                         // otherwise, dont
@@ -535,7 +555,91 @@ module control_render #(
 	end
 endmodule
 
+module border_anim
+#(
+parameter 	X_SIZE = 320,
+			Y_SIZE = 30,
+			TRANSPARENT = 3'b000
 
+)
+(
+	input clk,
+	input resetn,
+	input enable,
+	input [($clog2(X_SIZE)):0] x_orig,
+	input [($clog2(Y_SIZE)):0] y_orig,
+	output reg [($clog2(X_SIZE)):0] pt_x,
+	output reg [($clog2(Y_SIZE)):0] pt_y,
+	output reg [2:0] outColour,
+	output reg plot,
+	output reg done
+);
+	reg [($clog2(X_SIZE)):0] x_counter;
+	reg [($clog2(Y_SIZE)):0] y_counter;
+	wire [2:0]pixel_colour;
+	// output the colour of the current pixel on the stored image
+
+	borderRAM borderMemory(
+		.address((x_counter + (X_SIZE * y_counter))),
+		.clock(clk),
+		.data(3'd0),
+		.wren(1'd0),
+		.q(pixel_colour)
+	);
+
+	// actually move the pixels
+	always@(posedge clk)
+	begin
+		// reset counters and status
+		if(!resetn)begin
+			x_counter <= 0;
+			y_counter <= 0;
+			pt_x <= x_orig;
+			pt_y <= y_orig;
+			plot <= 0;
+			outColour <= 0;	
+			done <= 1;
+		end
+		else begin
+			if(enable) begin
+				// whilst enabled...
+				pt_x <= x_orig + x_counter;
+				pt_y <= y_orig + y_counter;
+				outColour <= pixel_colour;
+				if(pixel_colour == TRANSPARENT) begin
+					// DO NOT DRAW THIS PIXEL!
+					plot <= 0;
+				end
+				else begin
+					plot <= 1;
+				end
+
+				if(y_counter == Y_SIZE - 1 && x_counter == X_SIZE - 1) begin
+					// done counting the box, send pulse
+					x_counter <= 'd0;
+					y_counter <= 'd0;
+					done <= 1;
+				end
+				else if(x_counter < X_SIZE - 1) begin
+					// just count normally if we already started
+					x_counter <= x_counter + 1;
+					done <= 0;
+				end 
+				else begin
+					// completed row, go to new row and start on left
+					x_counter <= 'd0;
+					y_counter <= y_counter + 1;
+					done <= 0;
+				end
+			end
+			else begin
+				done <= 0;
+				x_counter <= 'd0;
+				y_counter <= 'd0;
+			end
+		end
+	end
+endmodule
 
 /*
 Auxillary Modules
