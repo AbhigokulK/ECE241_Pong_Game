@@ -2,15 +2,19 @@ vlib work
 
 vlog pong.v
 
-vsim pong_game -gCLOCKS_PER_SECOND=1 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5
+vsim pong_game -gCLOCKS_PER_SECOND=500 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5 -gX_PADDLE_SIZE=2 -gFRAMES_PER_UPDATE=1
 
 
 log {/*}
 add wave -unsigned {/*}
 add wave -unsigned {/pong_game/control_rend1/current_draw_state}
 add wave -unsigned {/pong_game/control_rend1/scored}
-add wave -unsigned {/pong_game/c_ball_move/lhs_scored}
-add wave -unsigned {/pong_game/c_ball_move/rhs_scored}
+#add wave -unsigned {/pong_game/c_ball_move/*}
+add wave -unsigned -color cyan {/pong_game/control_rend1/*}
+add wave -unsigned -color orange {/pong_game/ball_rend1/*}
+add wave -unsigned {/pong_game/ball_rend1/*}
+add wave -unsigned -color magenta {/pong_game/ball_rend1/*}
+add wave -unsigned -color magenta {/pong_game/ball_rend1/black_screen/*}
 
 #Test Case 1:
 #A: Reset, then wait 200 ps
@@ -19,7 +23,7 @@ add wave -unsigned {/pong_game/c_ball_move/rhs_scored}
 # should yield 13*2^2 + 8*2 + 5 = 73// = 01001001
 # set data to 9 after setting all registers
 
-force -freeze {iClock} 1 0, 0 {50 ps} -r 100
+force -freeze {iClock} 1 0, 0 {5 ps} -r 10
 
 force {iResetn} 0
 force {iDown} 0

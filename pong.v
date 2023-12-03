@@ -43,11 +43,11 @@ module pong_game(
 		// dependent parameters
 		X_SET = 'd2, 
 		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
-		PADDLE_MAX_Y = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE,
+		PADDLE_MAX_Y = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE - Y_MARGIN,
 
 		
 		Y_MIN = Y_MARGIN,
-		X_MAX = (X_SCREEN_PIXELS - 1 - X_BOXSIZE - X_PADDLE_SIZE - X_SET2), // 0-based and account for box width
+		X_MAX = (X_SET2), // 0-based and account for box width
 		Y_MAX = (Y_SCREEN_PIXELS - 1 - Y_BOXSIZE - Y_MARGIN),
 
 		PULSES_PER_SIXTIETH_SECOND = CLOCKS_PER_SECOND / 60;
@@ -111,7 +111,8 @@ module pong_game(
 	
 	control_ball_movement #(
 				RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
-				X_MAX, Y_MIN, Y_MAX, X_BOXSIZE, Y_BOXSIZE, MAX_RATE,
+				X_MAX, Y_MIN, Y_MAX, 
+				X_BOXSIZE, Y_BOXSIZE, MAX_RATE,
 				X_PADDLE_SIZE, Y_PADDLE_SIZE, X_PADDLE_SIZE, PADDLE_MAX_Y) 
 			c_ball_move
 			(iClock, iResetn, iEnable, iBlack, frameTick,
@@ -164,6 +165,7 @@ module pong_game(
 	wire done_background = 1'b1;
 	wire done_border = 1'b1;
 	wire draw_background_pulse, draw_border_pulse;
+
 	control_render #(MAX_SCORE)
 				control_rend1
 				(iClock, iResetn, iEnable,
@@ -198,7 +200,8 @@ module pong_game(
 	
 	//Draws BOTH Paddles
 
-	paddle_render #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+	paddle_render #(
+			X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 			X_SET, X_SET2, Y_MAX,
 			X_PADDLE_SIZE, Y_PADDLE_SIZE, 
 			FRAMES_PER_UPDATE, RATE)
@@ -212,7 +215,9 @@ module pong_game(
 	
 
 	always@(*) begin
-		if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
+		if(draw_background_pulse || draw_border_pulse) begin
+		end
+		else if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
 			oX <= out_ball_x;
 			oY <= out_ball_y;
 			oColour <= out_col_ball;
@@ -241,9 +246,7 @@ module pong_game(
 	rateDivider #(CLOCKS_PER_SECOND, 
 			FRAMES_PER_UPDATE) 
 			frameHandler (iClock, iResetn, iEnable, frameTick, frameCount);
-	
-	assign oBall_X = ball_x;
-	assign oBall_Y = ball_y;
+
 endmodule
 
 /*
@@ -298,7 +301,7 @@ module control_render #(
 
     // draw states
 	localparam 	
-		S_WAIT =                    5'd0,
+				S_WAIT =                    5'd0,
                 // BACKGROUND
                 S_BACKGROUND_START =        5'd1,
                 S_BACKGROUND_WAIT =         5'd2,
@@ -307,23 +310,24 @@ module control_render #(
                 S_BORDER_WAIT =             5'd4,
                 // PADDLE 1
     	        S_CLEAROLD_PADDLE1 =        5'd5,
-		S_CLEAROLD_PADDLE1_WAIT =   5'd6,
-		S_DRAWNEW_PADDLE1 =         5'd7,
-		S_DRAWNEW_PADDLE1_WAIT =    5'd8,
-                // PADDLE 2
-		S_CLEAROLD_PADDLE2 =        5'd9,
-		S_CLEAROLD_PADDLE2_WAIT =   5'd10,
-		S_DRAWNEW_PADDLE2 =         5'd11,
-		S_DRAWNEW_PADDLE2_WAIT =    5'd12,
-                // BALL
-		S_CLEAROLD_BALL_START =    5'd13,
-		S_CLEAROLD_BALL_WAIT =     5'd14,
-		S_DRAWNEW_BALL_START =     5'd15,
-		S_DRAWNEW_BALL_WAIT =      5'd16,
+				S_CLEAROLD_PADDLE1_WAIT =   5'd6,
+				S_DRAWNEW_PADDLE1 =         5'd7,
+				S_DRAWNEW_PADDLE1_WAIT =    5'd8,
 
-                // CLEAN ENTIRE SCREEN
-		S_BLACKSCREEN_START =       5'd17,
-		S_BLACKSCREEN_WAIT =        5'd18;
+				// PADDLE 2
+				S_CLEAROLD_PADDLE2 =        5'd9,
+				S_CLEAROLD_PADDLE2_WAIT =   5'd10,
+				S_DRAWNEW_PADDLE2 =         5'd11,
+				S_DRAWNEW_PADDLE2_WAIT =    5'd12,
+				// BALL
+				S_CLEAROLD_BALL_START =    5'd13,
+				S_CLEAROLD_BALL_WAIT =     5'd14,
+				S_DRAWNEW_BALL_START =     5'd15,
+				S_DRAWNEW_BALL_WAIT =      5'd16,
+
+				// CLEAN ENTIRE SCREEN
+				S_BLACKSCREEN_START =       5'd17,
+				S_BLACKSCREEN_WAIT =        5'd18;
 
     always@(*)
 	begin 
@@ -521,7 +525,7 @@ module control_render #(
 	always@(posedge clk)
 	begin 
 		if(!resetn) begin
-			current_draw_state <= S_WAIT;
+			current_draw_state <= S_BLACKSCREEN_START;
 		end
 		else begin
 			current_draw_state <= next_draw_state;
@@ -699,8 +703,10 @@ module drawBox_signal
 #(
 	parameter 	SCREEN_X = 10'd640,
 				SCREEN_Y = 9'd480,
+
 				X_MAX = 10'd640,
 				Y_MAX = 9'd480,
+					
 				X_BOXSIZE = 8'd4,	// Box X dimension
 				Y_BOXSIZE = 7'd4   	// Box Y dimension
 )

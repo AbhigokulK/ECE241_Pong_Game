@@ -118,7 +118,7 @@ module control_ball_movement
 				// left player got a goal, move to right at new round
 				next_move_state[1] <= S_LEFT;
 				// if we are still in the net, keep score signal on
-				next_score_state <= (x_pos > X_MAX - actual_rate)?S_LEFT_SCORED:S_PLAY;
+				next_score_state <= (x_pos > X_MAX - X_BOXSIZE - actual_rate)?S_LEFT_SCORED:S_PLAY;
 			end
 			else if(current_score_state == S_RIGHT_SCORED) begin
 				// right player got a goal, move to left at new round
@@ -149,7 +149,7 @@ module control_ball_movement
 				end
 				else begin
 					// must be going right
-					if(x_pos > X_MAX - actual_rate) begin
+					if(x_pos > X_MAX - X_BOXSIZE - actual_rate) begin
 						// if we go more right, we will hit the wall. DO PADDLE CHECK***
 						next_move_state[1] <= S_LEFT;
 						if(rightHit) begin
@@ -357,10 +357,13 @@ module ball_render
 #(
 	parameter 	SCREEN_X = 10'd640,
 				SCREEN_Y = 9'd480,
+
 				X_MAX = 10'd640,
 				Y_MAX = 9'd480,
+
 				X_BOXSIZE = 8'd4,	// Box X dimension
 				Y_BOXSIZE = 7'd4,   // Box Y dimension
+
 				FRAME_RATE = 15,
 				RATE = 1,
 				MAX_RATE = 15
@@ -519,8 +522,8 @@ module ball_render
 		resetn,
 		blackScreen_pulse,
 		
-		0, // set coordinates to be the top left most pixel to clear full screen
-		0,	
+		'd0, // set coordinates to be the top left most pixel to clear full screen
+		'd0,	
 
 		blk_x,
 		blk_y,
