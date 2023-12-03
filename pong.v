@@ -766,6 +766,93 @@ module drawBox_signal
 	end
 endmodule
 
+
+module border_anim
+#(
+parameter 	X_SIZE = 320,
+			Y_SIZE = 30,
+			TRANSPARENT = 3'b000
+
+)
+(
+	input clk,
+	input resetn,
+	input enable,
+	input [($clog2(X_SIZE)):0] x_orig,
+	input [($clog2(Y_SIZE)):0] y_orig,
+	output reg [($clog2(X_SIZE)):0] pt_x,
+	output reg [($clog2(Y_SIZE)):0] pt_y,
+	output reg [2:0] outColour,
+	output reg plot,
+	output reg done
+);
+	reg [($clog2(X_SIZE)):0] x_counter;
+	reg [($clog2(Y_SIZE)):0] y_counter;
+	wire [2:0]pixel_colour;
+	// output the colour of the current pixel on the stored image
+
+	borderRAM borderMemory(
+		.address((x_counter + (X_SIZE * y_counter))),
+		.clock(clk),
+		.data(3'd0),
+		.wren(1'd0),
+		.q(pixel_colour)
+	);
+
+	// actually move the pixels
+	always@(posedge clk)
+	begin
+		// reset counters and status
+		if(!resetn)begin
+			x_counter <= 0;
+			y_counter <= 0;
+			pt_x <= x_orig;
+			pt_y <= y_orig;
+			plot <= 0;
+			outColour <= 0;	
+			done <= 1;
+		end
+		else begin
+			if(enable) begin
+				// whilst enabled...
+				pt_x <= x_orig + x_counter;
+				pt_y <= y_orig + y_counter;
+				outColour <= pixel_colour;
+				if(pixel_colour == TRANSPARENT) begin
+					// DO NOT DRAW THIS PIXEL!
+					plot <= 0;
+				end
+				else begin
+					plot <= 1;
+				end
+
+				if(y_counter == Y_SIZE - 1 && x_counter == X_SIZE - 1) begin
+					// done counting the box, send pulse
+					x_counter <= 'd0;
+					y_counter <= 'd0;
+					done <= 1;
+				end
+				else if(x_counter < X_SIZE - 1) begin
+					// just count normally if we already started
+					x_counter <= x_counter + 1;
+					done <= 0;
+				end 
+				else begin
+					// completed row, go to new row and start on left
+					x_counter <= 'd0;
+					y_counter <= y_counter + 1;
+					done <= 0;
+				end
+			end
+			else begin
+				done <= 0;
+				x_counter <= 'd0;
+				y_counter <= 'd0;
+			end
+		end
+	end
+endmodule
+
 // used for the paddles*** should be replaced with flexible version...
 module drawBox_signal_paddle
 #(
