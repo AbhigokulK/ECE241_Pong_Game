@@ -61,11 +61,10 @@ module pong_vga_interface
 		Y_MARGIN = 20,
 
 		// game physics parameters
-		FRAMES_PER_UPDATE = 'd60,
-		PADDLE_RATE = 'd3,
+		FRAMES_PER_UPDATE = 'd15,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
-		TIME_TILL_ACCEL = 'd2,
+		TIME_TILL_ACCEL = 'd10,
 		
 		MAX_SCORE = 3,
 		
@@ -167,6 +166,11 @@ module pong_vga_interface
 
 	*/
 	wire lhs_pulse, rhs_pulse, boundary_pulse;
+	
+	wire [($clog2(X_MAX)):0]  ball_x_out;
+	wire [($clog2(Y_MAX)):0] ball_y_out;
+	wire [($clog2(X_SCREEN_PIXELS)):0] paddle_x2_out;
+	wire [($clog2(Y_MAX)):0] paddle_y2_out;
 
 	// KEYS ARE ACTIVE LOW (ie low when pushed down) PADDLE_OFFSET -
 	pong_game #(.X_BOXSIZE(X_BOXSIZE), .Y_BOXSIZE(Y_BOXSIZE), 
@@ -179,7 +183,11 @@ module pong_vga_interface
 					.iBlack(!KEY[3]), .iEnable(SW[9]), // IMPORTANT, SEE NOTE
 					.iUp(iUp), .iDown(iDown), .iUp2(SW[3]), .iDown2(SW[2]),
 					.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn),
-					.lhs_scored(lhs_pulse), .rhs_scored(rhs_pulse), .boundaryHit(boundary_pulse));
+					.lhs_scored(lhs_pulse), .rhs_scored(rhs_pulse), .boundaryHit(boundary_pulse),
+					.ball_x_out(ball_x_out), .ball_y_out(ball_y_out), .paddle_x2_out(paddle_x2_out),
+					.paddle_y2_out(paddle_y2_out)
+
+					);
 					
 	wire [($clog2(MAX_SCORE)):0] lhs_count;
 	wire [($clog2(MAX_SCORE)):0] rhs_count;
@@ -225,12 +233,15 @@ module pong_vga_interface
 	
 
 	// Output coordinates
-	hex_decoder hex0(lhs_count, HEX0);
-	hex_decoder hex1(rhs_count, HEX1);
-	//hex_decoder hex2({2'b00, ball_x_coord[9:8]}, HEX2);
-	//hex_decoder hex3(ball_y_coord[3:0], HEX3);
-	//hex_decoder hex4(ball_y_coord[7:4], HEX4);
-	//hex_decoder hex5({3'b000, ball_y_coord[8]}, HEX5);
+	//hex_decoder hex0(lhs_count, HEX0);
+	//hex_decoder hex1(rhs_count, HEX1);
+	
+	hex_decoder hex0(ball_x_out[3:0], HEX0);
+	hex_decoder hex1(ball_x_out[7:4], HEX1);
+	hex_decoder hex2(ball_y_out[3:0], HEX2);
+	hex_decoder hex3(ball_y_out[7:4], HEX3);
+	hex_decoder hex4(paddle_y2_out[3:0], HEX4);
+	hex_decoder hex5(paddle_y2_out[7:4], HEX5);
 	
 	PS2_Controller PS2 (
 	// Inputs
