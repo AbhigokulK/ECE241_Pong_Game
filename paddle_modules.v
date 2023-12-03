@@ -11,7 +11,7 @@ module control_paddle_move
 				Y_MAX = 'd480,
 				X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
 				Y_PADDLE_SIZE = 7'd40,
-				Y_MARGIN = 'd20
+				Y_MARGIN = 30
 )
 (
 	input clk,
@@ -26,7 +26,9 @@ module control_paddle_move
 );
 	// bit 1 is X direction, bit 2 is Y direction
 	reg[1:0] current_state, next_state;
-
+	wire topHit = (y_pos < (RATE + Y_MARGIN));
+	wire botHit = (y_pos > Y_MAX - RATE - Y_PADDLE_SIZE);
+	
 		// state variable declarations
 	localparam  S_STATIONARY   = 2'b00,
 		    S_UP   	   = 2'b01,
@@ -42,14 +44,14 @@ module control_paddle_move
 
 			// STATIONARY PADDLE 
 			if(current_state == S_STATIONARY) begin
-				if(up && !down && y_pos > RATE) next_state <= S_UP;
-				else if(!up && down && y_pos < Y_MAX - RATE) next_state <= S_DOWN;
+				if(up && !down && !topHit) next_state <= S_UP;
+				else if(!up && down && !botHit) next_state <= S_DOWN;
 				else next_state <= S_STATIONARY;
 			end
 
 			// VERTICAL DOWN BOUNDARY HANDLING
 			else if(current_state == S_DOWN) begin
-				if(y_pos > Y_MAX - RATE) next_state <= (up)?S_UP:S_STATIONARY;
+				if(botHit) next_state <= (up)?S_UP:S_STATIONARY;
 				else  if(down && !up)next_state <= S_DOWN;
 				else  if(!down && up)next_state <= S_UP;
 				else next_state <= S_STATIONARY;
@@ -57,7 +59,7 @@ module control_paddle_move
 
 			// VERTICAL UP BOUNDARY HANDLING
 			else if(current_state == S_UP) begin
-				if( y_pos < (RATE + Y_MARGIN) ) next_state <= (down)?S_DOWN:S_STATIONARY;
+				if( topHit ) next_state <= (down)?S_DOWN:S_STATIONARY;
 				else  if(down && !up) next_state <= S_DOWN;
 				else  if(!down && up)next_state <= S_UP;
 				else next_state <= S_STATIONARY;
@@ -165,7 +167,7 @@ module paddle_render
 #(
 parameter 	SCREEN_X = 10'd640,
 		SCREEN_Y = 9'd480,
-			 = 'd10,
+		X_SET = 'd10,
 		X_SET2 = 'd625,
 		Y_MAX = 'd480,
 		X_PADDLE_SIZE = 8'd5,	
