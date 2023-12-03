@@ -10,7 +10,8 @@ module control_paddle_move
 				X_SET = 'd10,
 				Y_MAX = 'd480,
 				X_PADDLE_SIZE = 8'd5,   // Paddle X dimension
-				Y_PADDLE_SIZE = 7'd40
+				Y_PADDLE_SIZE = 7'd40,
+				Y_MARGIN = 'd20
 )
 (
 	input clk,
@@ -56,7 +57,7 @@ module control_paddle_move
 
 			// VERTICAL UP BOUNDARY HANDLING
 			else if(current_state == S_UP) begin
-				if( y_pos < RATE ) next_state <= (down)?S_DOWN:S_STATIONARY;
+				if( y_pos < (RATE + Y_MARGIN) ) next_state <= (down)?S_DOWN:S_STATIONARY;
 				else  if(down && !up) next_state <= S_DOWN;
 				else  if(!down && up)next_state <= S_UP;
 				else next_state <= S_STATIONARY;
@@ -163,14 +164,14 @@ endmodule
 module paddle_render
 #(
 parameter 	SCREEN_X = 10'd640,
-			SCREEN_Y = 9'd480,
-			X_SET = 'd10,
-			X_SET2 = 'd625,
-			Y_MAX = 'd480,
-			X_PADDLE_SIZE = 8'd5,	
-			Y_PADDLE_SIZE = 7'd40,  
-			FRAME_RATE = 15,
-			RATE = 1
+		SCREEN_Y = 9'd480,
+		X_SET = 'd10,
+		X_SET2 = 'd625,
+		Y_MAX = 'd480,
+		X_PADDLE_SIZE = 8'd5,	
+		Y_PADDLE_SIZE = 7'd40,  
+		FRAME_RATE = 15,
+		RATE = 1
 )
 (
 	input clk,
