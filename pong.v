@@ -36,6 +36,7 @@ module pong_game(
 		FRAMES_PER_UPDATE = 'd15,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
+		PADDLE_RATE = 'd3,
 		TIME_TILL_ACCEL = 'd2,
 		
 		MAX_SCORE = 3,
@@ -44,6 +45,7 @@ module pong_game(
 		X_SET = 'd2, 
 		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
 		PADDLE_MAX_Y = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE - Y_MARGIN,
+		
 
 		
 		Y_MIN = Y_MARGIN,
@@ -135,7 +137,7 @@ module pong_game(
 	
 	
 	//Paddle 1	
-	control_paddle_move #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+	control_paddle_move #(PADDLE_RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_SET, Y_MAX, X_PADDLE_SIZE, Y_PADDLE_SIZE) 
 			c_paddleA_move 
 			(iClock, iResetn, iEnable ,
@@ -143,7 +145,7 @@ module pong_game(
 			iUp, iDown, y_dir_paddle1);
 
 	//Paddle 2
-	control_paddle_move #(RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+	control_paddle_move #(PADDLE_RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_SET, Y_MAX, X_PADDLE_SIZE, Y_PADDLE_SIZE) 
 			c_paddleB_move
 			(iClock, iResetn, iEnable,
@@ -154,7 +156,7 @@ module pong_game(
 	paddle_physics #(X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 			X_SET, X_SET2, Y_MAX,
 			X_PADDLE_SIZE, Y_PADDLE_SIZE, 
-			FRAMES_PER_UPDATE, RATE)
+			FRAMES_PER_UPDATE, PADDLE_RATE)
 			paddle_phys
 			(iClock, iResetn, iEnable,
 			frameTick, frameCount, y_dir_paddle1, y_dir_paddle2,
@@ -204,9 +206,9 @@ module pong_game(
 			X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 			X_SET, X_SET2, Y_MAX,
 			X_PADDLE_SIZE, Y_PADDLE_SIZE, 
-			FRAMES_PER_UPDATE, RATE)
+			FRAMES_PER_UPDATE, PADDLE_RATE)
 			paddle_rend
-			(iClock, iResetn, 1'b1,
+			(iClock, iResetn, iEnable,
 			frameTick, frameCount, paddle_x1, paddle_y1, paddle_x2,
 			paddle_y2, old_paddle_x1, old_paddle_y1, old_paddle_x2,
 			old_paddle_y2, pulse_clear1, pulse_draw1, pulse_clear2, 
@@ -540,39 +542,6 @@ Auxillary Modules
 */
 
 
-module scoreHandler
-#(
-	parameter MAX_SCORE = 5
-)
-(
-	input clk,
-	input resetn,
-	input lhs_scored, 
-	input rhs_scored,
-	output reg [($clog2(MAX_SCORE)):0] lhs_score_count,
-	output reg [($clog2(MAX_SCORE)):0] rhs_score_count
-);	
-
-	wire lhs_pulse, rhs_pulse;
-	always@(posedge clk)
-	begin
-		if(!resetn) begin
-			lhs_score_count <= 0;
-			rhs_score_count <= 0;
-		end
-		else begin
-			if(lhs_pulse) begin
-				lhs_score_count <= lhs_score_count + 1;
-			end
-			else if(rhs_pulse) begin
-				rhs_score_count <= rhs_score_count + 1;
-			end
-		end
-	end
-	signalToPulse left_pulse(clk, resetn, lhs_scored, lhs_pulse);
-	signalToPulse right_pulse(clk, resetn, rhs_scored, rhs_pulse);
-endmodule
-
 // converts a continous signal into a single pulse
 // only fails when the signal happens to rise with the clock and fall before the next posedge
 module signalToPulse
@@ -841,4 +810,3 @@ module drawBox_signal_paddle
 		end
 	end
 endmodule
-
