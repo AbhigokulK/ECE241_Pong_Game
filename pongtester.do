@@ -2,7 +2,7 @@ vlib work
 
 vlog pong.v
 
-vsim pong_game -gCLOCKS_PER_SECOND=500 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5 -gX_PADDLE_SIZE=2 -gFRAMES_PER_UPDATE=1
+vsim -L altera_mf_ver pong_game -gCLOCKS_PER_SECOND=500 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5 -gX_PADDLE_SIZE=2 -gFRAMES_PER_UPDATE=1
 
 
 log {/*}
@@ -17,12 +17,6 @@ add wave -unsigned -color magenta {/pong_game/ball_rend1/*}
 add wave -unsigned -color magenta {/pong_game/ball_rend1/black_screen/*}
 
 #Test Case 1:
-#A: Reset, then wait 200 ps
-#B: Go, then try to input the following:
-#C: A = 13, B = 8, C = 5, X = 2
-# should yield 13*2^2 + 8*2 + 5 = 73// = 01001001
-# set data to 9 after setting all registers
-
 force -freeze {iClock} 1 0, 0 {5 ps} -r 10
 
 force {iResetn} 0
