@@ -165,7 +165,7 @@ module paddle_render
 #(
 parameter 	SCREEN_X = 10'd640,
 		SCREEN_Y = 9'd480,
-		X_SET = 'd10,
+			 = 'd10,
 		X_SET2 = 'd625,
 		Y_MAX = 'd480,
 		X_PADDLE_SIZE = 8'd5,	

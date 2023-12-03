@@ -149,7 +149,7 @@ module control_ball_movement
 				end
 				else begin
 					// must be going right
-					if(x_pos > X_MAX - X_BOXSIZE -actual_rate) begin
+					if(x_pos > X_MAX - X_BOXSIZE - actual_rate) begin
 						// if we go more right, we will hit the wall. DO PADDLE CHECK***
 						next_move_state[1] <= S_LEFT;
 						if(rightHit) begin

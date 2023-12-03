@@ -2,7 +2,7 @@ vlib work
 
 vlog pong.v
 
-vsim -L altera_mf_ver pong_game -gCLOCKS_PER_SECOND=500 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5 -gX_PADDLE_SIZE=2 -gFRAMES_PER_UPDATE=1
+vsim -L altera_mf_ver pong_game -gCLOCKS_PER_SECOND=500 -gX_SCREEN_PIXELS=50 -gY_SCREEN_PIXELS=50 -gY_PADDLE_SIZE=5 -gX_PADDLE_SIZE=2 -gFRAMES_PER_UPDATE=1 -gWARNING_LEVEL=0
 
 
 log {/*}
@@ -11,6 +11,7 @@ add wave -unsigned {/pong_game/control_rend1/current_draw_state}
 add wave -unsigned {/pong_game/control_rend1/scored}
 #add wave -unsigned {/pong_game/c_ball_move/*}
 add wave -unsigned -color cyan {/pong_game/control_rend1/*}
+add wave -unsigned {/pong_game/drawBorder/*}
 add wave -unsigned -color orange {/pong_game/ball_rend1/*}
 add wave -unsigned {/pong_game/ball_rend1/*}
 add wave -unsigned -color magenta {/pong_game/ball_rend1/*}
