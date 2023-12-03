@@ -9,13 +9,13 @@ z2
 cModel Technology
 Z0 dC:/users/coolL/documents/abhischoolStuff/uniyear2/2023Fall/ece241_Pong_Game
 vball_physics
-Z1 !s110 1701550364
+Z1 !s110 1701618702
 !i10b 1
 !s100 60@07f>J`@j6idHYk6ELf2
 IkITMAY7Dn;J1XIi]kSH7N1
 Z2 VDg1SIo80bB@j0V0VzS_@n1
 Z3 dC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game
-Z4 w1701549948
+Z4 w1701552614
 Z5 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/ball_modules.v
 Z6 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/ball_modules.v
 L0 250
@@ -23,17 +23,17 @@ Z7 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z8 !s108 1701550364.000000
+Z8 !s108 1701618702.000000
 Z9 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/ball_modules.v|
-Z10 !s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/ball_modules.v|
+Z10 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/ball_modules.v|
 !i113 1
 Z11 o-work work
 Z12 tCvgOpt 0
 vball_render
 R1
 !i10b 1
-!s100 e9<Xk@gWDG_cZ8fT0oTSM3
-IiiO^zNFM7Ek>hKkd`m6eE2
+!s100 Sf1g5RY:L[V?0HXlhG75n3
+IMUO6:Z;Ok>h`d3IzRWf7F3
 R2
 R3
 R4
@@ -50,186 +50,228 @@ R10
 !i113 1
 R11
 R12
-vcalcD0
-Z13 !s110 1701550371
+vborder_anim
+Z13 !s110 1701618877
 !i10b 1
-!s100 5UCf=oCoeF[H=z^Hgff?P1
-I^=jZmcDJBUmmg=Rg?Tl3P2
+!s100 V?kl[3PdTci5UXTVTe4RU3
+IVEhHPf0b9Gg9h50Z5:HLj1
 R2
-R3
-Z14 w1701549696
-Z15 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v
-Z16 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v
-L0 242
+R0
+Z14 w1701618672
+Z15 8pong.v
+Z16 Fpong.v
+L0 621
 R7
 r1
 !s85 0
 31
-Z17 !s108 1701550371.000000
-Z18 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v|
-Z19 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v|
+Z17 !s108 1701618877.000000
+Z18 !s107 pong.v|
+Z19 !s90 -reportprogress|300|pong.v|
+!i113 1
+R12
+vborderRAM
+!s110 1701618835
+!i10b 1
+!s100 [T0>HiZ?;2NPQg1lShNhF1
+IWL6ATAK7i?<0Ofg]Y;9nH1
+R2
+R3
+w1701615246
+8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/borderRAM.v
+FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/borderRAM.v
+L0 39
+R7
+r1
+!s85 0
+31
+!s108 1701618835.000000
+!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/borderRAM.v|
+!s90 -reportprogress|300|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/borderRAM.v|
+!i113 1
+R11
+R12
+nborder@r@a@m
+vcalcD0
+Z20 !s110 1701618705
+!i10b 1
+!s100 eP[CcnU`<61Ne5CB]7^R00
+IB4@5:=?Okn19:3E[DFKK?0
+R2
+R3
+Z21 w1701549696
+Z22 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v
+Z23 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v
+L0 226
+R7
+r1
+!s85 0
+31
+Z24 !s108 1701618705.000000
+Z25 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v|
+Z26 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v|
 !i113 1
 R11
 R12
 ncalc@d0
 vcalcD1
-R13
+R20
 !i10b 1
-!s100 =aa:2aaC[7^ml=KMjOjUo2
-I20JJ@Z5OFX4kWB@T?7l@d2
+!s100 i`f7C<>PKP8I3A<3TGU>P1
+I<k8^Dzfj2HTja`Ph;dUlk0
 R2
 R3
-R14
-R15
-R16
-L0 259
+R21
+R22
+R23
+L0 243
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d1
 vcalcD2
-R13
+R20
 !i10b 1
-!s100 zlC`jWh0bZR@ReHXIOSV;0
-IDcXHXQQFb>`Z?kVkCLg_f2
+!s100 YX>5Y91hVE184Rm<@L_RF2
+I5iU27I8QoMT[MJ903Z>1_2
 R2
 R3
-R14
-R15
-R16
-L0 277
+R21
+R22
+R23
+L0 261
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d2
 vcalcD3
-R13
+R20
 !i10b 1
-!s100 ;1Bj``IIA?b>^SEb7?4<d0
-IWzTefFGALOU96kKQ30Rch3
+!s100 AV4bzGAE=n;17A1bSV<?^3
+Ie5EadbhBEmN1JXXb`z^a70
 R2
 R3
-R14
-R15
-R16
-L0 293
+R21
+R22
+R23
+L0 277
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d3
 vcalcD4
-R13
+R20
 !i10b 1
-!s100 bC?34cMo>Iz<EW[UNRUEj2
-Ik1oQ;i7mX`nh3b0NME?T]0
+!s100 ;[?DLfj>^Z^8T[>TI3Lmk2
+I[jGFXH9cl682CBWA<S7X43
 R2
 R3
-R14
-R15
-R16
-L0 310
+R21
+R22
+R23
+L0 294
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d4
 vcalcD5
-R13
+R20
 !i10b 1
-!s100 Rmj2dA]jPEZ8_8k;>c>]:0
-IhJ`8C79=:CF>ePa6XloVL3
+!s100 [A;>2k=:YJJ;LbQ:l8cbK2
+IYLDR@CocY5bY;f@PA^zNo3
 R2
 R3
-R14
-R15
-R16
-L0 328
+R21
+R22
+R23
+L0 312
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d5
 vcalcD6
-R13
+R20
 !i10b 1
-!s100 A_@D>D`UX_fKllV3OQaTE0
-IT`imOId@7L9cV>BZ2ad1L1
+!s100 3M24TA9QDg5dlUSdBQLzP3
+IC^8E96Eo1S>KRZnLF1VoD2
 R2
 R3
-R14
-R15
-R16
-L0 346
+R21
+R22
+R23
+L0 330
 R7
 r1
 !s85 0
 31
-R17
-R18
-R19
+R24
+R25
+R26
 !i113 1
 R11
 R12
 ncalc@d6
 vcontrol
-R1
+Z27 !s110 1701618703
 !i10b 1
 !s100 Vekdc_88CBNAS=:bKBLTf0
 Ijcjf`G1;^fc^Vk@H<jjLa0
 R2
 R3
-R14
-Z20 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v
-Z21 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v
+Z28 w1701551946
+Z29 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v
+Z30 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v
 L0 196
 R7
 r1
 !s85 0
 31
-R8
-Z22 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v|
-Z23 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v|
+Z31 !s108 1701618703.000000
+Z32 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v|
+Z33 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle.v|
 !i113 1
 R11
 R12
 vcontrol_ball_movement
 R1
 !i10b 1
-!s100 `WF?^Bl1VNWUN6F]N4nGX3
-I7NFI2E1DM^``_jioCO3LP0
+!s100 TU^2<QC[?VPcVdKUa=3Gh0
+IZfh6fGzL6ND^NbOJP;JIk3
 R2
 R3
 R4
@@ -247,99 +289,37 @@ R10
 R11
 R12
 vcontrol_paddle_move
-Z24 !s110 1701550365
+Z34 !s110 1701618704
 !i10b 1
 !s100 kRS4g@[>@4N93gKCKaVS`3
 I=c_c=haMAL@BRSo4f6b=61
 R2
 R3
-Z25 w1701549998
-Z26 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v
-Z27 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v
+Z35 w1701616471
+Z36 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v
+Z37 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v
 L0 5
 R7
 r1
 !s85 0
 31
-Z28 !s108 1701550365.000000
-Z29 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v|
-Z30 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v|
+Z38 !s108 1701618704.000000
+Z39 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v|
+Z40 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_modules.v|
 !i113 1
 R11
 R12
 vcontrol_render
-Z31 !s110 1701554342
-!i10b 1
-!s100 T8aobdjzk7edNg0Gg]T1;3
-I337X:W`6@L<PBRBnX=mTP0
-R2
-R0
-Z32 w1701554282
-Z33 8pong.v
-Z34 Fpong.v
-L0 261
-R7
-r1
-!s85 0
-31
-Z35 !s108 1701554342.000000
-Z36 !s107 pong.v|
-Z37 !s90 -reportprogress|300|pong.v|
-!i113 1
-R12
-vdrawBox_signal
-R31
-!i10b 1
-!s100 ZJZcO6DV:M0^<J2=]dWfD3
-IGjC=g:I9[NlFBS0KW32QA2
-R2
-R0
-R32
-R33
-R34
-L0 702
-R7
-r1
-!s85 0
-31
-R35
-R36
-R37
-!i113 1
-R12
-ndraw@box_signal
-vdrawBox_signal_paddle
-R31
-!i10b 1
-!s100 4M4N_QNPf7E4dI@SBf;Ob1
-IY_BDe7CnGI2nJDZ^NJ10T2
-R2
-R0
-R32
-R33
-R34
-L0 774
-R7
-r1
-!s85 0
-31
-R35
-R36
-R37
-!i113 1
-R12
-ndraw@box_signal_paddle
-vhex_decoder
 R13
 !i10b 1
-!s100 zYmVo<7C>0eDSQ?KDF9Yz1
-Ihe`P6K@Z0iQfXW:E3@J[>0
+!s100 oS<8UoKAkFlR^5I@1eGe>0
+I6=@^<PM=SYE;P7WMNn5N03
 R2
-R3
+R0
 R14
 R15
 R16
-L0 213
+L0 318
 R7
 r1
 !s85 0
@@ -347,6 +327,68 @@ r1
 R17
 R18
 R19
+!i113 1
+R12
+vdrawBox_signal
+R13
+!i10b 1
+!s100 541WSlz0<P]DFjA16J]he2
+IQ>1d@Gno1lSUHU858hON^3
+R2
+R0
+R14
+R15
+R16
+L0 838
+R7
+r1
+!s85 0
+31
+R17
+R18
+R19
+!i113 1
+R12
+ndraw@box_signal
+vdrawBox_signal_paddle
+R13
+!i10b 1
+!s100 ^>hVThI]LXA9ZLWb<7@1T3
+IGnj02f;KlzmbZ?EF>?TKi2
+R2
+R0
+R14
+R15
+R16
+L0 910
+R7
+r1
+!s85 0
+31
+R17
+R18
+R19
+!i113 1
+R12
+ndraw@box_signal_paddle
+vhex_decoder
+R20
+!i10b 1
+!s100 ?k11SfWF33J:7oa@eVKDa3
+I;0:NJ]YMPJHYeQ<1NKbb<1
+R2
+R3
+R21
+R22
+R23
+L0 197
+R7
+r1
+!s85 0
+31
+R24
+R25
+R26
 !i113 1
 R11
 R12
@@ -373,138 +415,159 @@ R11
 R12
 nhit@detect
 vholdPulse
-R31
+R13
 !i10b 1
-!s100 okH^[AD9l:<CY[WV[Y96d0
-Ic>Bj@SZHK28j`2kgb:@HM3
+!s100 ?2TaK59CQbYR>TSLNOKWk3
+I]S26BThVPCNMJ7IK9enbN3
 R2
 R0
-R32
-R33
-R34
-L0 606
+R14
+R15
+R16
+L0 742
 R7
 r1
 !s85 0
 31
-R35
-R36
-R37
+R17
+R18
+R19
 !i113 1
 R12
 nhold@pulse
 vpaddle
-R1
+R27
 !i10b 1
 !s100 GPKEX^iQ1?gbGGgI[K3i[0
 I7`olcfZVcO6bJ:k0GKHf53
 R2
 R3
-R14
-R20
-R21
+R28
+R29
+R30
 L0 18
 R7
 r1
 !s85 0
 31
-R8
-R22
-R23
+R31
+R32
+R33
 !i113 1
 R11
 R12
 vpaddle_physics
-R24
+R34
 !i10b 1
 !s100 [Az2^k10oCAhnV^;>AJ5C2
 INQ7af<JLY@?HaaM_Jai2h0
 R2
 R3
-R25
-R26
-R27
+R35
+R36
+R37
 L0 86
 R7
 r1
 !s85 0
 31
-R28
-R29
-R30
+R38
+R39
+R40
 !i113 1
 R11
 R12
 vpaddle_render
-R24
+R34
 !i10b 1
 !s100 _@I`?>djYRRe]gY7OVB?l0
 I8aF8H]=>fCY;ONMDQBJR_2
 R2
 R3
-R25
-R26
-R27
+R35
+R36
+R37
 L0 163
 R7
 r1
 !s85 0
 31
-R28
-R29
-R30
+R38
+R39
+R40
 !i113 1
 R11
 R12
 vpaddle_vga
-!s110 1701550366
+R20
 !i10b 1
 !s100 BT;72n9fWIkmkR1PS;?161
 IUe1W1WX0g`j7zPI[dfRfB2
 R2
 R3
-R14
-8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v
-FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v
+R21
+R22
+R23
 L0 1
 R7
 r1
 !s85 0
 31
-!s108 1701550366.000000
-!s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v|
-!s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/paddle_vga.v|
+R24
+R25
+R26
 !i113 1
 R11
 R12
 vpong_game
-R31
+R13
 !i10b 1
-!s100 QoH=fekB94Dil;7OKX9[M1
-Iz40n<1HzZ1U`OSVO5PfjN0
+!s100 lUcZ`3RIcN<WkOEk6<a=Z0
+IIiL31IE7kP00h;kC>i3>01
 R2
 R0
-R32
-R33
-R34
+R14
+R15
+R16
 L0 1
 R7
 r1
 !s85 0
 31
-R35
-R36
-R37
+R17
+R18
+R19
 !i113 1
 R12
+vpong_vga_interface
+Z41 !s110 1701618698
+!i10b 1
+!s100 2XbXFVbkfeGY:EGDNoJl]3
+IN^gmeBI9J;D?I`<14cNL=2
+R2
+R3
+Z42 w1701618352
+Z43 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v
+Z44 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v
+L0 1
+R7
+r1
+!s85 0
+31
+Z45 !s108 1701618698.000000
+Z46 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v|
+Z47 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/pong_vga_interface.v|
+!i113 1
+R11
+R12
 vPS2_Demo
-!s110 1701550368
+!s110 1701618706
 !i10b 1
 !s100 @jGi:VTX3DJhSQDSWVkB:1
 ICl[hVlYZfbWJ44UB3g<6;2
 R2
 R3
-R14
+R21
 8C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/PS2_Demo.v
 FC:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/PS2_Demo.v
 L0 2
@@ -512,7 +575,7 @@ R7
 r1
 !s85 0
 31
-!s108 1701550368.000000
+!s108 1701618706.000000
 !s107 C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/PS2_Demo.v|
 !s90 -reportprogress|30|-work|work|C:/Users/CoolL/Documents/AbhiSchoolStuff/UniYear2/2023Fall/ECE241_Pong_Game/PS2_Demo.v|
 !i113 1
@@ -520,87 +583,88 @@ R11
 R12
 n@p@s2_@demo
 vrateDivider
-R31
+R13
 !i10b 1
-!s100 Yhe?j[foT_KE=[_;YkYf60
-I9?[G7Oka_0Pc>L3Nc`ULM0
+!s100 do:<M170_z^134J5WK4kJ0
+IELJ>b]oYhD:5X[kbO6CW12
 R2
 R0
-R32
-R33
-R34
-L0 651
+R14
+R15
+R16
+L0 787
 R7
 r1
 !s85 0
 31
-R35
-R36
-R37
+R17
+R18
+R19
 !i113 1
 R12
 nrate@divider
 vrenderControl
-R1
+R27
 !i10b 1
 !s100 RzmiVD_U_M>J=jcFKF<8Q0
 IlA04mbJ0fA@bE=A<oeJJ:1
 R2
 R3
-R14
-R20
-R21
+R28
+R29
+R30
 L0 279
 R7
 r1
 !s85 0
 31
-R8
-R22
-R23
+R31
+R32
+R33
 !i113 1
 R11
 R12
 nrender@control
 vscoreHandler
-R31
+R41
 !i10b 1
-!s100 Tme4<RP<i;`SD0=HdMf0N1
-IT@Lc_[kazd1@oU?NZ>zEG1
+!s100 LHXF7Vn9I^^k;e5[573UZ0
+I2g?2K:CF?=jCRd?SjjA[31
 R2
-R0
-R32
-R33
-R34
-L0 543
+R3
+R42
+R43
+R44
+L0 251
 R7
 r1
 !s85 0
 31
-R35
-R36
-R37
+R45
+R46
+R47
 !i113 1
+R11
 R12
 nscore@handler
 vsignalToPulse
-R31
+R13
 !i10b 1
-!s100 iQ2NBOCaPED2[>X]YYbX71
-IzVXgndRTVzeG0[_i5BII23
+!s100 ^Q=[10fID7R1D@SM6ka5l2
+I>XzC20263j2`1fd65A]H53
 R2
 R0
-R32
-R33
-R34
-L0 578
+R14
+R15
+R16
+L0 714
 R7
 r1
 !s85 0
 31
-R35
-R36
-R37
+R17
+R18
+R19
 !i113 1
 R12
 nsignal@to@pulse

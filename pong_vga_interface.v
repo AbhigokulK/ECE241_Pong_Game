@@ -95,45 +95,44 @@ module pong_vga_interface
 	reg	[7:0]	last_data_received;
 	
 	//Keyboard input
-	reg iUp, iDown;
+	reg iUp1, iDown1;
+	reg iUp2, iDown2;
 	reg escape;
  
 	always @(posedge CLOCK_50)
 	begin
-	if (KEY[0] == 1'b0)
-		last_data_received <= 8'b0;
+		if (KEY[0] == 1'b0) last_data_received <= 8'b0;
+		if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+			last_data_received <= ps2_key_data;
+			escape <= 1'b0;
+		end
 		
-	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
-		last_data_received <= ps2_key_data;
-		escape <= 1'b0;
-	end
-	
-	else if(ps2_key_data == 8'hF0)
-	begin
-		escape <= 1'b1;
-	end
-	
-	if(escape == 1'b1)
-	begin
-		last_data_received <= 8'b0;
-	end
-	
-	
-	if(last_data_received == 8'd29)
-	begin
-		iUp <= 1'b1;
-	end
-	else begin
-		iUp <= 1'b0;
-	end	
-	
-	if(last_data_received == 8'd27)
-	begin
-		iDown <= 1'b1;
-	end
-	else begin
-		iDown <= 1'b0;
-	end
+		else if(ps2_key_data == 8'hF0)
+		begin
+			escape <= 1'b1;
+		end
+		
+		if(escape == 1'b1)
+		begin
+			last_data_received <= 8'b0;
+		end
+		
+		
+		if(last_data_received == 8'd29)
+		begin
+			iUp1 <= 1'b1;
+		end
+		else begin
+			iUp1 <= 1'b0;
+		end	
+		
+		if(last_data_received == 8'd27)
+		begin
+			iDown1 <= 1'b1;
+		end
+		else begin
+			iDown1 <= 1'b0;
+		end
 	end	
 
 	// Create an Instance of a VGA controller - there can be only one!

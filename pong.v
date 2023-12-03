@@ -28,8 +28,8 @@ module pong_game(
 	// Declaring Parameters!
 	parameter
 		// game size parameters
-		X_BOXSIZE = 8'd4,   // Box X dimension
-		Y_BOXSIZE = 7'd4,   // Box Y dimension
+		X_BOXSIZE = 10'd4,   // Box X dimension
+		Y_BOXSIZE = 9'd4,   // Box Y dimension
 		X_SCREEN_PIXELS = 10'd320,  // X screen width for starting resolution and fake_fpga (was 9*)
 		Y_SCREEN_PIXELS = 9'd240,  // Y screen height for starting resolution and fake_fpga (was 7*)
 		CLOCKS_PER_SECOND = 50000000, // 50 MHZ for fake_fpga (was 5KHz*)
@@ -44,7 +44,8 @@ module pong_game(
 		PADDLE_RATE = 'd3,
 		TIME_TILL_ACCEL = 'd2,
 		
-		MAX_SCORE = 3,
+		MAX_SCORE = 5,
+		WARNING_LEVEL = 3,
 		
 		// dependent parameters
 		X_SET = 'd2, 
@@ -173,18 +174,6 @@ module pong_game(
 	wire done_border = 1'b1;
 	wire draw_background_pulse, draw_border_pulse;
 
-	control_render #(MAX_SCORE)
-				control_rend1
-				(iClock, iResetn, iEnable,
-				frameTick,  done_background,
-				done_border, done_clear1, done_draw1, done_clear2, 
-				done_draw2, done_clearOld, done_drawNew, done_cleanScreen,
-				(lhs_scored || rhs_scored), rhs_score_count, lhs_score_count,
-				pulse_clear1, pulse_draw1, pulse_clear2, pulse_draw2,
-				clearOld_pulse, drawNew_pulse, cleanScreen_pulse,
-				draw_background_pulse, draw_border_pulse);
-	
-
 
 	wire [($clog2(X_SCREEN_PIXELS)):0] out_paddle_x, out_ball_x;
 	wire [($clog2(Y_SCREEN_PIXELS)):0] out_paddle_y, out_ball_y;
@@ -221,9 +210,66 @@ module pong_game(
 			done_draw2, out_paddle_x, out_paddle_y, out_col_paddle, plot_paddle);
 	
 
+
+	// Border Rendering
+	wire [2:0] border_colour;
+	wire [($clog2(X_SCREEN_PIXELS)):0] border_x;
+	wire [($clog2(Y_MARGIN)):0] border_y;
+	wire border_plot;
+
+	border_anim  #(
+		X_SCREEN_PIXELS, Y_MARGIN
+	)
+	drawBorder(
+		clk, resetn, draw_border_pulse, 'd0, 'd0,
+		border_x, border_y, border_colour, border_plot, done_border
+	);
+
+
+	
+	wire [($clog2(X_SCREEN_PIXELS)):0] out_clear_border_x;
+	wire [($clog2(Y_SCREEN_PIXELS)):0] out_clear_border_y;
+	/*
+	input clk,
+	input resetn,
+	input enable,
+
+	input [($clog2(X_MAX)):0] x_orig,
+	input [($clog2(Y_MAX)):0] y_orig,
+
+	output reg [($clog2(SCREEN_X)):0] pt_x,
+	output reg [($clog2(SCREEN_Y)):0] pt_y,
+
+	output reg done
+	*/
+
+	drawBox_signal #(
+		X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
+		X_SCREEN_PIXELS, Y_MARGIN,
+		X_SCREEN_PIXELS, Y_MARGIN
+	) 
+		clearBorder(
+			clk, resetn, clear_border_pulse,
+			'd0, 'd0,
+			out_clear_border_x, out_clear_border_y,
+			done_clear_border
+	);
+	
+
 	always@(*) begin
-		if(draw_background_pulse || draw_border_pulse) begin
+		if(draw_border_pulse) begin
+			oX <= border_x;
+			oY <= border_y;
+			oColour <= border_colour;
+			rednered <= border_plot;
 		end
+		else if(clear_border_pulse) begin
+			oX <= out_clear_border_x;
+			oY <= out_clear_border_y;
+			oColour <= 3'b000;
+			rendered <= done_clear_border;
+		end
+		// ball handles cleearing the screen as well!
 		else if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
 			oX <= out_ball_x;
 			oY <= out_ball_y;
@@ -236,16 +282,22 @@ module pong_game(
 			oColour <= out_col_paddle;
 			rendered <= plot_paddle;
 		end
-
-
 	end	
 
+	control_render #(MAX_SCORE, WARNING_LEVEL, FRAMES_PER_UPDATE)
+				control_rend1
+				(iClock, iResetn, iEnable,
+				frameTick, frameCount, 
+				done_background, done_border, clear_border_pulse,
+				done_clear1, done_draw1, done_clear2, 
+				done_draw2, done_clearOld, done_drawNew, done_cleanScreen,
+				(lhs_scored || rhs_scored), rhs_score_count, lhs_score_count,
+				pulse_clear1, pulse_draw1, pulse_clear2, pulse_draw2,
+				clearOld_pulse, drawNew_pulse, cleanScreen_pulse,
+				draw_background_pulse, draw_border_pulse, clear_border_pulse);
+	
+
 		assign oPlot = !rendered;
-		assign ball_x_out = ball_x;
-		assign ball_y_out = ball_y;
-		assign paddle_x2_out = paddle_x2;
-		assign paddle_y2_out = paddle_y2;
-		
 
 	/*
 	============================
@@ -272,23 +324,26 @@ Combined Modules
 
 module control_render #(
     parameter   MAX_SCORE = 5,
-                WARNING_LEVEL = 3
+                WARNING_LEVEL = 3,
+				FRAME_RATE = 15
 )
 (
     input clk,
 	input resetn,
 	input enable,
 	input frameTick,
+	input [($clog2(FRAME_RATE)):0] frameCount,
 
-    	input done_background,
-    	input done_border,
+    input done_background,
+	input done_border,
+	input done_clear_border,
 
 	input done_clearOld1,
 	input done_drawNew1,
 	input done_clearOld2,
 	input done_drawNew2,
 	
-    	input done_clearOld_ball,
+    input done_clearOld_ball,
 	input done_drawNew_ball,
 	input done_blackScreen,
 	input scored,
@@ -306,7 +361,8 @@ module control_render #(
 	output reg blackScreen_pulse,
 
     output reg draw_background_pulse,
-    output reg draw_border_pulse
+    output reg draw_border_pulse,
+	output reg clear_border_pulse
 );
 
     reg[4:0] current_draw_state, next_draw_state;
@@ -320,26 +376,30 @@ module control_render #(
                 // BORDER
                 S_BORDER_START =            5'd3,
                 S_BORDER_WAIT =             5'd4,
+
+				S_BORDER_CLEAN_START = 		5'd5,
+				S_BORDER_CLEAN_WAIT =		5'd6,
+
                 // PADDLE 1
-    	        S_CLEAROLD_PADDLE1 =        5'd5,
-				S_CLEAROLD_PADDLE1_WAIT =   5'd6,
-				S_DRAWNEW_PADDLE1 =         5'd7,
-				S_DRAWNEW_PADDLE1_WAIT =    5'd8,
+    	        S_CLEAROLD_PADDLE1 =        5'd7,
+				S_CLEAROLD_PADDLE1_WAIT =   5'd8,
+				S_DRAWNEW_PADDLE1 =         5'd9,
+				S_DRAWNEW_PADDLE1_WAIT =    5'd10,
 
 				// PADDLE 2
-				S_CLEAROLD_PADDLE2 =        5'd9,
-				S_CLEAROLD_PADDLE2_WAIT =   5'd10,
-				S_DRAWNEW_PADDLE2 =         5'd11,
-				S_DRAWNEW_PADDLE2_WAIT =    5'd12,
+				S_CLEAROLD_PADDLE2 =        5'd11,
+				S_CLEAROLD_PADDLE2_WAIT =   5'd12,
+				S_DRAWNEW_PADDLE2 =         5'd13,
+				S_DRAWNEW_PADDLE2_WAIT =    5'd14,
 				// BALL
-				S_CLEAROLD_BALL_START =    5'd13,
-				S_CLEAROLD_BALL_WAIT =     5'd14,
-				S_DRAWNEW_BALL_START =     5'd15,
-				S_DRAWNEW_BALL_WAIT =      5'd16,
+				S_CLEAROLD_BALL_START =    5'd15,
+				S_CLEAROLD_BALL_WAIT =     5'd16,
+				S_DRAWNEW_BALL_START =     5'd17,
+				S_DRAWNEW_BALL_WAIT =      5'd18,
 
 				// CLEAN ENTIRE SCREEN
-				S_BLACKSCREEN_START =       5'd17,
-				S_BLACKSCREEN_WAIT =        5'd18;
+				S_BLACKSCREEN_START =       5'd19,
+				S_BLACKSCREEN_WAIT =        5'd20;
 
     always@(*)
 	begin 
@@ -350,9 +410,9 @@ module control_render #(
 		else begin
 			case(current_draw_state)
 				
-		S_WAIT:begin
+				S_WAIT:begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-		    else next_draw_state <= (frameTick)?S_BACKGROUND_START:S_WAIT;
+		    		else next_draw_state <= (frameTick)?S_BACKGROUND_START:S_WAIT;
 				end
                 
                 //Background
@@ -365,7 +425,7 @@ module control_render #(
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
                     else begin
                         // if anyone's score is above the warning level display the warning!
-                        if(rhs_score > WARNING_LEVEL || lhs_score > WARNING_LEVEL) begin
+                        if((rhs_score > WARNING_LEVEL || lhs_score > WARNING_LEVEL)) begin
                             next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
                         end    
                         // otherwise, dont
@@ -383,8 +443,18 @@ module control_render #(
 
                 S_BORDER_WAIT: begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-                    else next_draw_state <= (done_background)?S_CLEAROLD_PADDLE1:S_BORDER_WAIT;
+                    else next_draw_state <= (done_border)?S_CLEAROLD_PADDLE1:S_BORDER_WAIT;
                 end
+
+				S_BORDER_CLEAN_START: begin
+					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    else next_draw_state <= S_BORDER_CLEAN_WAIT;
+				end
+
+				S_BORDER_CLEAN_WAIT: begin
+					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    else next_draw_state <= (done_clear_border)?S_CLEAROLD_PADDLE1:S_BORDER_CLEAN_WAIT;
+				end
 
 				//Paddle 1
 				S_CLEAROLD_PADDLE1: begin
@@ -490,6 +560,7 @@ module control_render #(
 
         draw_background_pulse <= 0;
         draw_border_pulse <= 0;
+		clear_border_pulse <= 0;
 
 		case(current_draw_state)
 
@@ -503,6 +574,9 @@ module control_render #(
                 draw_border_pulse <= 1;
             end
             
+			S_BORDER_CLEAN_WAIT: begin
+				clear_border_pulse <= 1;
+			end
             //Paddle 1
 			S_CLEAROLD_PADDLE1_WAIT: begin
 				clearOld1_pulse <= 1'b1;
