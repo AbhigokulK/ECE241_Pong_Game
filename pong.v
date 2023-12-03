@@ -142,6 +142,7 @@ module pong_game(
 				actual_rate);
 	
 	
+	
 	//Paddle 1	
 	control_paddle_move #(PADDLE_RATE, X_SCREEN_PIXELS, Y_SCREEN_PIXELS,
 				X_SET, Y_MAX, X_PADDLE_SIZE, Y_PADDLE_SIZE) 
@@ -261,7 +262,7 @@ module pong_game(
 			oX <= border_x;
 			oY <= border_y;
 			oColour <= border_colour;
-			rednered <= border_plot;
+			rendered <= border_plot;
 		end
 		else if(clear_border_pulse) begin
 			oX <= out_clear_border_x;
@@ -297,7 +298,7 @@ module pong_game(
 				draw_background_pulse, draw_border_pulse, clear_border_pulse);
 	
 
-		assign oPlot = !rendered;
+	assign oPlot = !rendered;
 
 	/*
 	============================
@@ -426,7 +427,9 @@ module control_render #(
                     else begin
                         // if anyone's score is above the warning level display the warning!
                         if((rhs_score > WARNING_LEVEL || lhs_score > WARNING_LEVEL)) begin
-                            next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
+							if(frameCount < FRAME_RATE/2) next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
+							else if (frameCount > FRAME_RATE/2) next_draw_state <= (done_background)?S_BORDER_CLEAN_START:S_BACKGROUND_WAIT;
+							else next_draw_state <= (done_background)?S_CLEAROLD_PADDLE1:S_BACKGROUND_WAIT;
                         end    
                         // otherwise, dont
                         else begin
