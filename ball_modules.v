@@ -124,13 +124,13 @@ module control_ball_movement
 				// right player got a goal, move to left at new round
 				next_move_state[1] <= S_RIGHT;
 				// if we are still in the net, keep score signal on
-				next_score_state <= (x_pos < X_MIN + actual_rate)?S_RIGHT_SCORED:S_PLAY;
+				next_score_state <= (x_pos < X_MIN)?S_RIGHT_SCORED:S_PLAY;
 			end
 			// no score occured, do normal checks
 			else begin
 				if(current_move_state[1] == S_LEFT) begin
 					// going left
-					if(x_pos < X_MIN + actual_rate) begin
+					if(x_pos < X_MIN) begin
 						// if we go more left, we will hit the wall. DO PADDLE CHECK***
 						next_move_state[1] <= S_RIGHT;
 						if(leftHit) begin
@@ -149,7 +149,7 @@ module control_ball_movement
 				end
 				else begin
 					// must be going right
-					if(x_pos > X_MAX - X_BOXSIZE - actual_rate) begin
+					if(x_pos > X_MAX - X_BOXSIZE -actual_rate) begin
 						// if we go more right, we will hit the wall. DO PADDLE CHECK***
 						next_move_state[1] <= S_LEFT;
 						if(rightHit) begin
@@ -437,7 +437,7 @@ module ball_render
 					// output the clearOld points
 					render_x <= pt_clear_x;
 					render_y <= pt_clear_y;
-					col_out <= 3'b000;
+//					col_out <= 3'b000;
 					rendered <= 0;
 				end
 				else if(drawNew_pulse) begin
