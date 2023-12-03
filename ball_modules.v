@@ -149,7 +149,7 @@ module control_ball_movement
 				end
 				else begin
 					// must be going right
-					if(x_pos > X_MAX - X_BOXSIZE - actual_rate) begin
+					if(x_pos > X_MAX - X_BOXSIZE -actual_rate) begin
 						// if we go more right, we will hit the wall. DO PADDLE CHECK***
 						next_move_state[1] <= S_LEFT;
 						if(rightHit) begin
@@ -244,7 +244,7 @@ module hitDetect
 );
 	wire topCheck = (ball_y < (paddle_y + PADDLE_Y)); // top of ball is above bottom of paddle
 	wire botCheck = ((ball_y) > paddle_y - Y_BOXSIZE); // bottom of ball is below top of paddle
-	assign contact = (topCheck || botCheck);
+	assign contact = (topCheck && botCheck);
 endmodule
 
 module ball_physics
