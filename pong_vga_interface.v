@@ -19,12 +19,21 @@ module pong_vga_interface
 		VGA_SYNC_N,						//	VGA SYNC
 		VGA_R,   						//	VGA Red[9:0]
 		VGA_G,	 						//	VGA Green[9:0]
-		VGA_B   						//	VGA Blue[9:0]
+		VGA_B,   						//	VGA Blue[9:0]
+		
+		// Bidirectionals
+		PS2_CLK,
+		PS2_DAT
 	);
 
 	input			CLOCK_50;				//	50 MHz
 	input	[3:0]	KEY;			
 	input [9:0] SW;						//*
+	
+		// Bidirectionals
+	inout				PS2_CLK;
+	inout				PS2_DAT;
+	
 	output [9:0] LEDR;					//*
 	output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	// Declare your inputs and outputs here
@@ -52,7 +61,8 @@ module pong_vga_interface
 		Y_MARGIN = 20,
 
 		// game physics parameters
-		FRAMES_PER_UPDATE = 'd15,
+		FRAMES_PER_UPDATE = 'd60,
+		PADDLE_RATE = 'd3,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
 		TIME_TILL_ACCEL = 'd2,
@@ -64,19 +74,68 @@ module pong_vga_interface
 		X_SET2 = X_SCREEN_PIXELS - X_PADDLE_SIZE,
 		PADDLE_MAX_Y = Y_SCREEN_PIXELS - 1 - Y_PADDLE_SIZE,
 
-		
+		PULSE_HOLD_TIME = 1,
 		Y_MIN = Y_MARGIN,
 		X_MAX = (X_SCREEN_PIXELS - 1 - X_BOXSIZE - X_PADDLE_SIZE - X_SET2), // 0-based and account for box width
 		Y_MAX = (Y_SCREEN_PIXELS - 1 - Y_BOXSIZE - Y_MARGIN),
 
 		PULSES_PER_SIXTIETH_SECOND = CLOCKS_PER_SECOND / 60;
-
+		
+		
 	// Create the colour, x, y and writeEn wires that are inputs to the controller.
 
 	wire [2:0] colour;
 	wire [9:0] x;
 	wire [8:0] y;
 	wire writeEn;
+	
+	// Internal Wires
+	wire		[7:0]	ps2_key_data;
+	wire				ps2_key_pressed;
+	wire           send_command;
+	reg	[7:0]	last_data_received;
+	
+	//Keyboard input
+	reg iUp, iDown;
+	reg escape;
+ 
+	always @(posedge CLOCK_50)
+	begin
+	if (KEY[0] == 1'b0)
+		last_data_received <= 8'b0;
+		
+	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+		last_data_received <= ps2_key_data;
+		escape <= 1'b0;
+	end
+	
+	else if(ps2_key_data == 8'hF0)
+	begin
+		escape <= 1'b1;
+	end
+	
+	if(escape == 1'b1)
+	begin
+		last_data_received <= 8'b0;
+	end
+	
+	
+	if(last_data_received == 8'd29)
+	begin
+		iUp <= 1'b1;
+	end
+	else begin
+		iUp <= 1'b0;
+	end	
+	
+	if(last_data_received == 8'd27)
+	begin
+		iDown <= 1'b1;
+	end
+	else begin
+		iDown <= 1'b0;
+	end
+	end	
 
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
@@ -100,7 +159,7 @@ module pong_vga_interface
 		defparam VGA.RESOLUTION = "320x240";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-		defparam VGA.BACKGROUND_IMAGE = "stars_colour.mif"; //test image loaded, was black.mif
+		defparam VGA.BACKGROUND_IMAGE = "black.mif"; //test image loaded, was black.mif
 	// Put your code here. Your code should produce signals x,y,colour and writeEn
 	// for the VGA controller, in addition to any other functionality your design may require.
 	
@@ -109,19 +168,18 @@ module pong_vga_interface
 	*/
 	wire lhs_pulse, rhs_pulse, boundary_pulse;
 
-	// KEYS ARE ACTIVE LOW (ie low when pushed down)
+	// KEYS ARE ACTIVE LOW (ie low when pushed down) PADDLE_OFFSET -
 	pong_game #(.X_BOXSIZE(X_BOXSIZE), .Y_BOXSIZE(Y_BOXSIZE), 
-					.X_SCREEN_PIXELS(X_SCREEN_PIXELS), .Y_SCREEN_PIXELS(Y_SCREEN_PIXELS),
-					.PADDLE_X(PADDLE_X), .PADDLE_Y(PADDLE_Y), 
-					.Y_MARGIN(Y_MARGIN), .PADDLE_OFFSET(PADDLE_OFFSET), .PADDLE_MAX_Y(PADDLE_MAX_Y),
-					.FRAMES_PER_UPDATE(FRAME_RATE), .RATE(RATE), .MAX_RATE(MAX_RATE)) 
+					.X_SCREEN_PIXELS(X_SCREEN_PIXELS), .Y_SCREEN_PIXELS(Y_SCREEN_PIXELS), 
+					.Y_MARGIN(Y_MARGIN), .PADDLE_MAX_Y(PADDLE_MAX_Y),
+					.FRAMES_PER_UPDATE(FRAMES_PER_UPDATE), .RATE(RATE), .MAX_RATE(MAX_RATE)) 
 					
 					pong
-					(.iResetn(resetn), .iColour(SW[8:7]), .iClock(CLOCK_50),
+					(.iResetn(resetn), .iColour(SW[8:6]), .iClock(CLOCK_50),
 					.iBlack(!KEY[3]), .iEnable(SW[9]), // IMPORTANT, SEE NOTE
-					.iUp(SW[1], .iDown(SW[0], .iUp2(SW[3]), .iDown2(SW[2]),
+					.iUp(iUp), .iDown(iDown), .iUp2(SW[3]), .iDown2(SW[2]),
 					.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn),
-					.lhs_score(lhs_pulse), .rhs_score(rhs_pulse), .boundaryHit(boundary_pulse));
+					.lhs_scored(lhs_pulse), .rhs_scored(rhs_pulse), .boundaryHit(boundary_pulse));
 					
 	wire [($clog2(MAX_SCORE)):0] lhs_count;
 	wire [($clog2(MAX_SCORE)):0] rhs_count;
@@ -142,6 +200,7 @@ module pong_vga_interface
 	assign LEDR[5:4] = rhs_count;
 	assign LEDR[9:8] = {!KEY[3], !KEY[0]};
 	
+	
 	holdPulse #(CLOCKS_PER_SECOND,
 				PULSE_HOLD_TIME)
 	lhs_LED(CLOCK_50,
@@ -149,6 +208,7 @@ module pong_vga_interface
 			resetn,
 			LEDR[0]);
 
+	
 	holdPulse #(CLOCKS_PER_SECOND,
 				PULSE_HOLD_TIME)
 			rhs_LED(CLOCK_50,
@@ -162,15 +222,30 @@ module pong_vga_interface
 				boundary_pulse,
 				resetn,
 				LEDR[6]);
+	
 
 	// Output coordinates
-	hex_decoder hex0(ball_x_coord[3:0], HEX0);
-	hex_decoder hex1(ball_x_coord[7:4], HEX1);
-	hex_decoder hex2({2'b00, ball_x_coord[9:8]}, HEX2);
+	hex_decoder hex0(lhs_count, HEX0);
+	hex_decoder hex1(rhs_count, HEX1);
+	//hex_decoder hex2({2'b00, ball_x_coord[9:8]}, HEX2);
+	//hex_decoder hex3(ball_y_coord[3:0], HEX3);
+	//hex_decoder hex4(ball_y_coord[7:4], HEX4);
+	//hex_decoder hex5({3'b000, ball_y_coord[8]}, HEX5);
 	
-	hex_decoder hex3(ball_y_coord[3:0], HEX3);
-	hex_decoder hex4(ball_y_coord[7:4], HEX4);
-	hex_decoder hex5({3'b000, ball_y_coord[8]}, HEX5);
+	PS2_Controller PS2 (
+	// Inputs
+	.CLOCK_50				(CLOCK_50),
+	.reset				(!resetn),
+
+	// Bidirectionals
+	.PS2_CLK			(PS2_CLK),
+ 	.PS2_DAT			(PS2_DAT),
+
+	// Outputs
+	.received_data		(ps2_key_data),
+	.received_data_en	(ps2_key_pressed)
+	);
+	
 	
 endmodule
 
@@ -230,6 +305,7 @@ module hex_decoder(c, display);
 	assign display[4] = !w[4];
 	assign display[5] = !w[5];
 	assign display[6] = !w[6];
+	
 endmodule
 
 
