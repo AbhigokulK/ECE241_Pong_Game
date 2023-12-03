@@ -61,10 +61,10 @@ module pong_vga_interface
 		Y_MARGIN = 20,
 
 		// game physics parameters
-		FRAMES_PER_UPDATE = 'd15,
+		FRAMES_PER_UPDATE = 'd60,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
-		TIME_TILL_ACCEL = 'd10,
+		TIME_TILL_ACCEL = 'd3,
 		
 		MAX_SCORE = 3,
 		
@@ -95,44 +95,45 @@ module pong_vga_interface
 	reg	[7:0]	last_data_received;
 	
 	//Keyboard input
-	reg iUp1, iDown1;
-	reg iUp2, iDown2;
+	reg iUp, iDown;
 	reg escape;
  
 	always @(posedge CLOCK_50)
 	begin
-		if (KEY[0] == 1'b0) last_data_received <= 8'b0;
-		if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
-			last_data_received <= ps2_key_data;
-			escape <= 1'b0;
-		end
+	if (KEY[0] == 1'b0)
+		last_data_received <= 8'b0;
 		
-		else if(ps2_key_data == 8'hF0)
-		begin
-			escape <= 1'b1;
-		end
-		
-		if(escape == 1'b1)
-		begin
-			last_data_received <= 8'b0;
-		end
-		
-		
-		if(last_data_received == 8'd29)
-		begin
-			iUp1 <= 1'b1;
-		end
-		else begin
-			iUp1 <= 1'b0;
-		end	
-		
-		if(last_data_received == 8'd27)
-		begin
-			iDown1 <= 1'b1;
-		end
-		else begin
-			iDown1 <= 1'b0;
-		end
+	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+		last_data_received <= ps2_key_data;
+		escape <= 1'b0;
+	end
+	
+	else if(ps2_key_data == 8'hF0)
+	begin
+		escape <= 1'b1;
+	end
+	
+	if(escape == 1'b1)
+	begin
+		last_data_received <= 8'b0;
+	end
+	
+	
+	if(last_data_received == 8'd29)
+	begin
+		iUp <= 1'b1;
+	end
+	else begin
+		iUp <= 1'b0;
+	end	
+	
+	if(last_data_received == 8'd27)
+	begin
+		iDown <= 1'b1;
+	end
+	else begin
+		iDown <= 1'b0;
+	end
 	end	
 
 	// Create an Instance of a VGA controller - there can be only one!
@@ -232,15 +233,15 @@ module pong_vga_interface
 	
 
 	// Output coordinates
-	//hex_decoder hex0(lhs_count, HEX0);
-	//hex_decoder hex1(rhs_count, HEX1);
+	hex_decoder hex0(rhs_count, HEX0);
+	hex_decoder hex1(lhs_count, HEX1);
 	
-	hex_decoder hex0(ball_x_out[3:0], HEX0);
-	hex_decoder hex1(ball_x_out[7:4], HEX1);
-	hex_decoder hex2(ball_y_out[3:0], HEX2);
-	hex_decoder hex3(ball_y_out[7:4], HEX3);
-	hex_decoder hex4(paddle_y2_out[3:0], HEX4);
-	hex_decoder hex5(paddle_y2_out[7:4], HEX5);
+	//hex_decoder hex0(ball_x_out[3:0], HEX0);
+	//hex_decoder hex1(ball_x_out[7:4], HEX1);
+	//hex_decoder hex2(ball_y_out[3:0], HEX2);
+	//hex_decoder hex3(ball_y_out[7:4], HEX3);
+	//hex_decoder hex4(paddle_y2_out[3:0], HEX4);
+	//hex_decoder hex5(paddle_y2_out[7:4], HEX5);
 	
 	PS2_Controller PS2 (
 	// Inputs
