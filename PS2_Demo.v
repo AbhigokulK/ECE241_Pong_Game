@@ -57,9 +57,6 @@ wire		[7:0]	ps2_key_data;
 wire				ps2_key_pressed;
 wire           send_command;
 
-// Internal Registers
-reg			[7:0]	last_data_received;
-
 // State Machine Registers
 
 /*****************************************************************************
@@ -73,45 +70,100 @@ if we get a break signal on clock tick X then our desired key on clock tick X+1,
 /*****************************************************************************
  *                             Sequential Logic                              *
  *****************************************************************************/
-reg escape;
+
+ 	reg	[7:0]	last_data_received_p1;
+	reg	[7:0]	last_data_received_p2;
+	
+
+	reg[2:0] current_key_state;
+	reg[2:0] key_state;
+	
+	localparam S_WAIT = 3'd0,
+		   S_INPUT = 3'd1,
+		   S_BREAK = 3'd2;
  
-always @(posedge CLOCK_50)
-begin
-	if (KEY[0] == 1'b0)
-		last_data_received <= 8'b0;
-		
-	if (ps2_key_pressed == 1'b1 && (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
-		last_data_received <= ps2_key_data;
-		escape <= 1'b0;
-	end
-	
-	else if(ps2_key_data == 8'hF0)
+always@(posedge CLOCK_50)
 	begin
-		escape <= 1'b1;
+		if (!KEY[0]) begin
+			last_data_received_p1 <= 8'b0;
+			last_data_received_p2 <= 8'b0;
+		end
+
+		//Paddle 1
+		if(last_data_received_p1 == 8'd29)
+		begin
+			LEDR[9] <= 1'b1;
+		end
+		else begin
+			LEDR[9] <= 1'b0;
+		end	
+	
+		if(last_data_received_p1 == 8'd27)
+		begin
+			LEDR[8] <= 1'b1;
+		end
+		else begin
+			LEDR[8] <= 1'b0;
+		end
+
+		//Paddle 2
+		if(last_data_received_p2 == 8'd68)
+		begin
+			LEDR[7] <= 1'b1;
+		end
+		else begin
+			LEDR[7] <= 1'b0;
+		end
+	
+		if(last_data_received_p2 == 8'd75)
+		begin
+			LEDR[6] <= 1'b1;
+		end
+		else begin
+			LEDR[6] <= 1'b0;
+		end
+
+		case(current_key_state)	
+			S_WAIT: begin
+				if (ps2_key_data == 8'hF0) key_state <= S_BREAK;
+            else if (ps2_key_pressed) key_state <= S_INPUT;
+				else key_state <= S_WAIT;				
+			end
+			S_INPUT: begin
+				if (ps2_key_data == 8'hF0) key_state <= S_BREAK;
+				else if ( (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+					last_data_received_p1 <= ps2_key_data;
+				end
+				else if ( (ps2_key_data == 8'd68 || ps2_key_data == 8'd75) ) begin
+					last_data_received_p2 <= ps2_key_data;
+				end
+				key_state <= S_WAIT;
+			end
+			S_BREAK: begin 
+				if ( (ps2_key_data == 8'd29 || ps2_key_data == 8'd27) ) begin
+					last_data_received_p1 <= 8'd0;
+				end
+				else if ( (ps2_key_data == 8'd68 || ps2_key_data == 8'd75) ) begin
+					last_data_received_p2 <= 8'd0;
+				end
+				key_state <= S_WAIT;
+			end
+
+			default: key_state <= S_WAIT;
+
+		endcase
+
 	end
 	
-	if(escape == 1'b1)
-	begin
-		last_data_received <= 8'b0;
+	always@(posedge CLOCK_50)
+	begin 
+		if(!KEY[0]) begin
+			current_key_state <= S_WAIT;
+		end
+		else begin
+			current_key_state <= key_state;
+		end
 	end
-	
-	
-	if(last_data_received == 8'd29)
-	begin
-		LEDR[9] <= 1'b1;
-	end
-	else begin
-		LEDR[9] <= 1'b0;
-	end	
-	
-	if(last_data_received == 8'd27)
-	begin
-		LEDR[8] <= 1'b1;
-	end
-	else begin
-		LEDR[8] <= 1'b0;
-	end
-end
 
 
 /*****************************************************************************
@@ -145,7 +197,7 @@ PS2_Controller PS2 (
 
 Hexadecimal_To_Seven_Segment Segment0 (
 	// Inputs
-	.hex_number			(last_data_received[3:0]),
+	.hex_number			(last_data_received_p1[3:0]),
 
 	// Bidirectional
 
@@ -155,7 +207,7 @@ Hexadecimal_To_Seven_Segment Segment0 (
 
 Hexadecimal_To_Seven_Segment Segment1 (
 	// Inputs
-	.hex_number			(last_data_received[7:4]),
+	.hex_number			(last_data_received_p1[7:4]),
 
 	// Bidirectional
 
