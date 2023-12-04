@@ -1,0 +1,74 @@
+
+State Machine - |pong_vga_interface|key_state
+Name key_state.S_WAIT key_state.S_BREAK key_state.S_INPUT 
+key_state.S_WAIT 0 0 0 
+key_state.S_INPUT 1 0 1 
+key_state.S_BREAK 1 1 0 
+
+State Machine - |pong_vga_interface|PS2_Controller:PS2|s_ps2_transceiver
+Name s_ps2_transceiver.PS2_STATE_3_END_TRANSFER s_ps2_transceiver.PS2_STATE_2_COMMAND_OUT s_ps2_transceiver.PS2_STATE_1_DATA_IN s_ps2_transceiver.PS2_STATE_0_IDLE s_ps2_transceiver.PS2_STATE_4_END_DELAYED 
+s_ps2_transceiver.PS2_STATE_0_IDLE 0 0 0 0 0 
+s_ps2_transceiver.PS2_STATE_1_DATA_IN 0 0 1 1 0 
+s_ps2_transceiver.PS2_STATE_2_COMMAND_OUT 0 1 0 1 0 
+s_ps2_transceiver.PS2_STATE_3_END_TRANSFER 1 0 0 1 0 
+s_ps2_transceiver.PS2_STATE_4_END_DELAYED 0 0 0 1 1 
+
+State Machine - |pong_vga_interface|PS2_Controller:PS2|Altera_UP_PS2_Command_Out:PS2_Command_Out|s_ps2_transmitter
+Name s_ps2_transmitter.PS2_STATE_7_TRANSMISSION_ERROR s_ps2_transmitter.PS2_STATE_6_COMMAND_WAS_SENT s_ps2_transmitter.PS2_STATE_5_RECEIVE_ACK_BIT s_ps2_transmitter.PS2_STATE_4_TRANSMIT_STOP_BIT s_ps2_transmitter.PS2_STATE_3_TRANSMIT_DATA s_ps2_transmitter.PS2_STATE_2_WAIT_FOR_CLOCK s_ps2_transmitter.PS2_STATE_1_INITIATE_COMMUNICATION s_ps2_transmitter.PS2_STATE_0_IDLE 
+s_ps2_transmitter.PS2_STATE_0_IDLE 0 0 0 0 0 0 0 0 
+s_ps2_transmitter.PS2_STATE_1_INITIATE_COMMUNICATION 0 0 0 0 0 0 1 1 
+s_ps2_transmitter.PS2_STATE_2_WAIT_FOR_CLOCK 0 0 0 0 0 1 0 1 
+s_ps2_transmitter.PS2_STATE_3_TRANSMIT_DATA 0 0 0 0 1 0 0 1 
+s_ps2_transmitter.PS2_STATE_4_TRANSMIT_STOP_BIT 0 0 0 1 0 0 0 1 
+s_ps2_transmitter.PS2_STATE_5_RECEIVE_ACK_BIT 0 0 1 0 0 0 0 1 
+s_ps2_transmitter.PS2_STATE_6_COMMAND_WAS_SENT 0 1 0 0 0 0 0 1 
+s_ps2_transmitter.PS2_STATE_7_TRANSMISSION_ERROR 1 0 0 0 0 0 0 1 
+
+State Machine - |pong_vga_interface|PS2_Controller:PS2|Altera_UP_PS2_Data_In:PS2_Data_In|s_ps2_receiver
+Name s_ps2_receiver.PS2_STATE_3_PARITY_IN s_ps2_receiver.PS2_STATE_2_DATA_IN s_ps2_receiver.PS2_STATE_1_WAIT_FOR_DATA s_ps2_receiver.PS2_STATE_0_IDLE s_ps2_receiver.PS2_STATE_4_STOP_IN 
+s_ps2_receiver.PS2_STATE_0_IDLE 0 0 0 0 0 
+s_ps2_receiver.PS2_STATE_1_WAIT_FOR_DATA 0 0 1 1 0 
+s_ps2_receiver.PS2_STATE_2_DATA_IN 0 1 0 1 0 
+s_ps2_receiver.PS2_STATE_3_PARITY_IN 1 0 0 1 0 
+s_ps2_receiver.PS2_STATE_4_STOP_IN 0 0 0 1 1 
+
+State Machine - |pong_vga_interface|pong_game:pong|control_render:control_rend1|current_draw_state
+Name current_draw_state.S_BLACKSCREEN_WAIT current_draw_state.S_WAIT current_draw_state.S_DRAWNEW_BALL_WAIT current_draw_state.S_DRAWNEW_BALL_START current_draw_state.S_CLEAROLD_BALL_WAIT current_draw_state.S_CLEAROLD_BALL_START current_draw_state.S_DRAWNEW_PADDLE2_WAIT current_draw_state.S_DRAWNEW_PADDLE2 current_draw_state.S_CLEAROLD_PADDLE2_WAIT current_draw_state.S_CLEAROLD_PADDLE2 current_draw_state.S_DRAWNEW_PADDLE1_WAIT current_draw_state.S_DRAWNEW_PADDLE1 current_draw_state.S_CLEAROLD_PADDLE1_WAIT current_draw_state.S_CLEAROLD_PADDLE1 current_draw_state.S_BORDER_WAIT current_draw_state.S_BORDER_START current_draw_state.S_BACKGROUND_WAIT current_draw_state.S_BACKGROUND_START current_draw_state.S_BLACKSCREEN_START 
+current_draw_state.S_BLACKSCREEN_START 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+current_draw_state.S_BACKGROUND_START 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+current_draw_state.S_BACKGROUND_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+current_draw_state.S_BORDER_START 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+current_draw_state.S_BORDER_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+current_draw_state.S_CLEAROLD_PADDLE1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+current_draw_state.S_CLEAROLD_PADDLE1_WAIT 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_PADDLE1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_PADDLE1_WAIT 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+current_draw_state.S_CLEAROLD_PADDLE2 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_CLEAROLD_PADDLE2_WAIT 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_PADDLE2 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_PADDLE2_WAIT 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_CLEAROLD_BALL_START 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_CLEAROLD_BALL_WAIT 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_BALL_START 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_DRAWNEW_BALL_WAIT 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_WAIT 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+current_draw_state.S_BLACKSCREEN_WAIT 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |pong_vga_interface|pong_game:pong|control_paddle_move:c_paddleB_move|current_state
+Name current_state.S_STATIONARY current_state.S_DOWN current_state.S_UP 
+current_state.S_STATIONARY 0 0 0 
+current_state.S_UP 1 0 1 
+current_state.S_DOWN 1 1 0 
+
+State Machine - |pong_vga_interface|pong_game:pong|control_paddle_move:c_paddleA_move|current_state
+Name current_state.S_STATIONARY current_state.S_DOWN current_state.S_UP 
+current_state.S_STATIONARY 0 0 0 
+current_state.S_UP 1 0 1 
+current_state.S_DOWN 1 1 0 
+
+State Machine - |pong_vga_interface|pong_game:pong|control_ball_movement:c_ball_move|current_score_state
+Name current_score_state.S_BOUND_HIT current_score_state.S_RIGHT_SCORED current_score_state.S_LEFT_SCORED current_score_state.S_PLAY 
+current_score_state.S_PLAY 0 0 0 0 
+current_score_state.S_LEFT_SCORED 0 0 1 1 
+current_score_state.S_RIGHT_SCORED 0 1 0 1 
+current_score_state.S_BOUND_HIT 1 0 0 1 

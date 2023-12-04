@@ -14,7 +14,7 @@ module pong_game(
 	output reg [($clog2(Y_SCREEN_PIXELS)):0] oY,
 
 	output reg [2:0] 	oColour,     // VGA pixel colour (0-7)
-	output wire 	     	oPlot,       // Pixel drawn enable
+	output wire 	    oPlot,       // Pixel drawn enable
 
 	output wire lhs_scored,
 	output wire rhs_scored,
@@ -169,10 +169,6 @@ module pong_game(
 			paddle_x1, paddle_y1, paddle_x2, paddle_y2,
 			old_paddle_x1, old_paddle_y1, old_paddle_x2, old_paddle_y2);
 
-
-	
-	
-
 	wire [($clog2(X_SCREEN_PIXELS)):0] out_paddle_x, out_ball_x;
 	wire [($clog2(Y_SCREEN_PIXELS)):0] out_paddle_y, out_ball_y;
 	wire [2:0] out_col_paddle, out_col_ball;
@@ -208,10 +204,26 @@ module pong_game(
 			done_draw2, out_paddle_x, out_paddle_y, out_col_paddle, plot_paddle);
 	
 	
-	wire done_background = 1'b1;
-	wire draw_background_pulse, draw_border_pulse;
+	// background rendering
+	wire draw_background_pulse;
+	wire [2:0] back_colour;
+	wire [($clog2(X_SCREEN_PIXELS)):0] back_x;
+	wire [($clog2(Y_SCREEN_PIXELS)):0] back_y;
+	wire done_background;
+	wire background_plot;
+
+	background_anim #(
+		X_SCREEN_PIXELS, Y_SCREEN_PIXELS
+	)
+	drawBackground(
+		iClock, iResetn, draw_background_pulse,
+		'd0, 'd0, 
+		back_x, back_y, back_colour,
+		background_plot, done_background
+	);
 	
-// Border Rendering
+	// Border Rendering
+	wire draw_border_pulse;
 	wire [2:0] border_colour;
 	wire [($clog2(X_SCREEN_PIXELS)):0] border_x;
 	wire [($clog2(Y_MARGIN)):0] border_y;
@@ -225,10 +237,6 @@ module pong_game(
 		iClock, iResetn, draw_border_pulse, 'd0, 'd0,
 		border_x, border_y, border_colour, border_plot, done_border
 	);
-
-
-	
-	
 	
 
 	always@(*) begin
@@ -237,6 +245,12 @@ module pong_game(
 			oY <= border_y;
 			oColour <= border_colour;
 			rendered <= border_plot;
+		end
+		else if(draw_background_pulse) begin
+			oX <= back_x;
+			oY <= back_y;
+			oColour <= back_colour;
+			rendered <= background_plot;
 		end
 		// ball handles cleearing the screen as well!
 		else if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
@@ -279,7 +293,11 @@ module pong_game(
 	rateDivider #(CLOCKS_PER_SECOND, 
 			FRAMES_PER_UPDATE) 
 			frameHandler (iClock, iResetn, iEnable, frameTick, frameCount);
-			
+	assign ball_x_out = ball_x;
+	assign ball_y_out = ball_x;	
+	assign paddle_x2_out = paddle_x2;
+	assign paddle_y2_out = paddle_y2;
+
 endmodule
 
 /*
@@ -374,18 +392,18 @@ module control_render #(
 			case(current_draw_state)
 				
 				S_WAIT:begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
 		    		else next_draw_state <= (frameTick)?S_BACKGROUND_START:S_WAIT;
 				end
                 
                 //Background
                 S_BACKGROUND_START: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= S_BACKGROUND_WAIT;
                 end
 
                 S_BACKGROUND_WAIT: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
                     else begin
 						next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
                     end
@@ -393,74 +411,74 @@ module control_render #(
 
                 // BORDER
                 S_BORDER_START: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= S_BORDER_WAIT;
                 end
 
                 S_BORDER_WAIT: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= (done_border)?S_CLEAROLD_PADDLE1:S_BORDER_WAIT;
                 end
 
 				//Paddle 1
 				S_CLEAROLD_PADDLE1: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
                 	else next_draw_state <= S_CLEAROLD_PADDLE1_WAIT;
 				end
 				S_CLEAROLD_PADDLE1_WAIT: begin
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= (done_clearOld1)?S_DRAWNEW_PADDLE1:S_CLEAROLD_PADDLE1_WAIT;
 				end
 				S_DRAWNEW_PADDLE1: begin
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= S_DRAWNEW_PADDLE1_WAIT;
 				end
 				S_DRAWNEW_PADDLE1_WAIT: begin
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= (done_drawNew1)?S_CLEAROLD_PADDLE2:S_DRAWNEW_PADDLE1_WAIT;
 				end
 
 				//Paddle 2
 				S_CLEAROLD_PADDLE2: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
 					else next_draw_state <= S_CLEAROLD_PADDLE2_WAIT;
 				end
 				S_CLEAROLD_PADDLE2_WAIT: begin
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= (done_clearOld2)?S_DRAWNEW_PADDLE2:S_CLEAROLD_PADDLE2_WAIT;
 				end
 				S_DRAWNEW_PADDLE2: begin
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
                     else next_draw_state <= S_DRAWNEW_PADDLE2_WAIT;
 				end
 				S_DRAWNEW_PADDLE2_WAIT: begin
-                    if(scored) next_draw_state <= S_BLACKSCREEN_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_START;
 					else next_draw_state <= (done_drawNew2)?S_CLEAROLD_BALL_START:S_DRAWNEW_PADDLE2_WAIT;
 				end
 
                 // BALL
                 S_CLEAROLD_BALL_START: begin
 					// set up pulse to kickstart clear old module
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
 					else next_draw_state <= S_CLEAROLD_BALL_WAIT;
 				end
 				S_CLEAROLD_BALL_WAIT: begin
 					// set the pulse to 0, and only go next when the done signal is given
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
 					// while clearing, keep clearing until it is done
 					else next_draw_state <= (done_clearOld_ball)?S_DRAWNEW_BALL_START:S_CLEAROLD_BALL_WAIT;
 				end
 
 				S_DRAWNEW_BALL_START: begin
 					// set up pulse to kickstart the draw new module
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
 					// start drawing asap
 					else next_draw_state <= S_DRAWNEW_BALL_WAIT;
 				end
 
 				S_DRAWNEW_BALL_WAIT: begin
 					// set the pulse to 0, and only go next when the done signal is given
-					if(scored) next_draw_state <= S_BLACKSCREEN_START;
+					if(scored) next_draw_state <= S_BACKGROUND_START;
 					// keep drawing until it is done. if it is done, go back to waiting till next frame and clear old
 					else next_draw_state <= (done_drawNew_ball)?S_WAIT:S_DRAWNEW_BALL_WAIT;
 				end
@@ -482,7 +500,7 @@ module control_render #(
 					1, 0, resetting, stay here
 					1, 1, done drawing, go next
 					*/
-					next_draw_state <= (done_blackScreen&&resetn)?S_WAIT:S_BLACKSCREEN_WAIT;
+					next_draw_state <= (done_blackScreen&&resetn)?S_BORDER_START:S_BLACKSCREEN_WAIT;
 				end
 				default: next_draw_state <= S_BLACKSCREEN_START;
 
@@ -547,7 +565,9 @@ module control_render #(
             S_BLACKSCREEN_WAIT: begin
                 blackScreen_pulse <= 1;
             end
-
+			default: begin
+				
+			end
 		endcase
 	end
 
@@ -569,8 +589,85 @@ Auxillary Modules
 */
 
 
-// converts a continous signal into a single pulse
-// only fails when the signal happens to rise with the clock and fall before the next posedge
+module background_anim
+#(
+parameter 	X_SIZE = 320,
+			Y_SIZE = 240
+)
+(
+	input clk,
+	input resetn,
+	input enable,
+
+	input [($clog2(X_SIZE)):0] x_orig,
+	input [($clog2(Y_SIZE)):0] y_orig,
+
+	output reg [($clog2(X_SIZE)):0] pt_x,
+	output reg [($clog2(Y_SIZE)):0] pt_y,
+	output reg [2:0] outColour,
+
+	output reg plot,
+	output reg done
+);
+	reg [($clog2(X_SIZE)):0] x_counter;
+	reg [($clog2(Y_SIZE)):0] y_counter;
+	wire [2:0]pixel_colour;
+	// output the colour of the current pixel on the stored image
+
+	stars_hexROM backgroundA(
+		.address((x_counter + (X_SIZE * y_counter))),
+		.clock(clk),
+		.q(pixel_colour)
+	);
+
+	// actually move the pixels
+	always@(posedge clk)
+	begin
+		// reset counters and status
+		if(!resetn)begin
+			x_counter <= 0;
+			y_counter <= 0;
+			pt_x <= x_orig;
+			pt_y <= y_orig;
+			plot <= 0;
+			outColour <= 0;	
+			done <= 1;
+		end
+		else begin
+			if(enable) begin
+				// whilst enabled...
+				pt_x <= x_orig + x_counter;
+				pt_y <= y_orig + y_counter;
+				outColour <= pixel_colour;
+				plot <= 1;
+
+				if(y_counter == Y_SIZE - 1 && x_counter == X_SIZE - 1) begin
+					// done counting the box, send pulse
+					x_counter <= 'd0;
+					y_counter <= 'd0;
+					done <= 1;
+				end
+				else if(x_counter < X_SIZE - 1) begin
+					// just count normally if we already started
+					x_counter <= x_counter + 1;
+					done <= 0;
+				end 
+				else begin
+					// completed row, go to new row and start on left
+					x_counter <= 'd0;
+					y_counter <= y_counter + 1;
+					done <= 0;
+				end
+			end
+			else begin
+				done <= 0;
+				x_counter <= 'd0;
+				y_counter <= 'd0;
+			end
+		end
+	end
+endmodule
+
 
 module border_anim
 #(
@@ -658,6 +755,9 @@ parameter 	X_SIZE = 320,
 	end
 endmodule
 
+
+// converts a continous signal into a single pulse
+// only fails when the signal happens to rise with the clock and fall before the next posedge
 module signalToPulse
 (
 	input clk,

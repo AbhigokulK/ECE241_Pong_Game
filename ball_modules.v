@@ -413,6 +413,17 @@ module ball_render
 	// registers for cleaning the screen
 	wire [($clog2(SCREEN_X)):0] blk_x;
 	wire [($clog2(SCREEN_Y)):0] blk_y;
+	wire [2:0] back_col;
+	wire[16:0] address = (blk_x + (320 * blk_y));
+
+
+	// change name based on the ROM image you want...
+	stars_hexROM backgroundA(
+		address,
+		clk,
+		back_col
+	);
+
 
 	always@(posedge clk) begin   
 		// Active Low Synchronous Reset

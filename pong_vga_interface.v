@@ -176,7 +176,7 @@ module pong_vga_interface
 
 	end
 	
-	*/
+	
 
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
@@ -223,7 +223,7 @@ module pong_vga_interface
 					pong
 					(.iResetn(resetn), .iColour(SW[8:6]), .iClock(CLOCK_50),
 					.iBlack(!KEY[3]), .iEnable(SW[9]), // IMPORTANT, SEE NOTE
-					.iUp(iUp), .iDown(iDown), .iUp2(SW[3]), .iDown2(SW[2]),
+					.iUp(iUp1), .iDown(iDown1), .iUp2(iUp2), .iDown2(iDown2),
 					.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn),
 					.lhs_scored(lhs_pulse), .rhs_scored(rhs_pulse), .boundaryHit(boundary_pulse),
 					.ball_x_out(ball_x_out), .ball_y_out(ball_y_out), .paddle_x2_out(paddle_x2_out),
