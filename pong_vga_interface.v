@@ -64,7 +64,7 @@ module pong_vga_interface
 		FRAMES_PER_UPDATE = 'd60,
 		RATE = 'd1,
 		MAX_RATE = 'd5,
-		TIME_TILL_ACCEL = 'd3,
+		TIME_TILL_ACCEL = 'd120,
 		
 		MAX_SCORE = 3,
 		
@@ -181,7 +181,7 @@ module pong_vga_interface
 					pong
 					(.iResetn(resetn), .iColour(SW[8:6]), .iClock(CLOCK_50),
 					.iBlack(!KEY[3]), .iEnable(SW[9]), // IMPORTANT, SEE NOTE
-					.iUp(iUp), .iDown(iDown), .iUp2(SW[3]), .iDown2(SW[2]),
+					.iUp(iUp), .iDown(iDown), .iUp2(!KEY[3]), .iDown2(!KEY[2]),
 					.oX(x), .oY(y), .oColour(colour), .oPlot(writeEn),
 					.lhs_scored(lhs_pulse), .rhs_scored(rhs_pulse), .boundaryHit(boundary_pulse),
 					.ball_x_out(ball_x_out), .ball_y_out(ball_y_out), .paddle_x2_out(paddle_x2_out),
