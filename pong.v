@@ -208,35 +208,53 @@ module pong_game(
 			done_draw2, out_paddle_x, out_paddle_y, out_col_paddle, plot_paddle);
 	
 	
-	wire done_background = 1'b1;
-	wire draw_background_pulse, draw_border_pulse;
 	
 // Border Rendering
-	wire [2:0] border_colour;
-	wire [($clog2(X_SCREEN_PIXELS)):0] border_x;
-	wire [($clog2(Y_MARGIN)):0] border_y;
-	wire done_border;
-	wire border_plot;
+	wire draw_top_border_pulse;
+	wire [2:0] top_border_colour;
+	wire [($clog2(X_SCREEN_PIXELS)):0] top_border_x;
+	wire [($clog2(Y_MARGIN)):0] top_border_y;
+	wire done_top_border;
+	wire top_border_plot;
 
 	border_anim  #(
 		X_SCREEN_PIXELS, Y_MARGIN
 	)
-	drawBorder(
-		iClock, iResetn, draw_border_pulse, 'd0, 'd0,
-		border_x, border_y, border_colour, border_plot, done_border
+	draw_TopBorder(
+		iClock, iResetn, draw_top_border_pulse, 'd0, 'd0,
+		top_border_x, top_border_y, top_border_colour, top_border_plot, done_top_border
 	);
 
 
-	
+	wire draw_bot_border_pulse;
+	wire [2:0] bot_border_colour;
+	wire [($clog2(X_SCREEN_PIXELS)):0] bot_border_x;
+	wire [($clog2(Y_MARGIN)):0] bot_border_y;
+	wire done_bot_border;
+	wire bot_border_plot;
+
+	border_anim  #(
+		X_SCREEN_PIXELS, Y_MARGIN
+	)
+	draw_BotBorder(
+		iClock, iResetn, draw_bot_border_pulse, 'd0, (Y_SCREEN_PIXELS - Y_MARGIN),
+		bot_border_x, bot_border_y, bot_border_colour, bot_border_plot, done_bot_border
+	);
 	
 	
 
 	always@(*) begin
-		if(draw_border_pulse) begin
-			oX <= border_x;
-			oY <= border_y;
-			oColour <= border_colour;
-			rendered <= border_plot;
+		if(draw_top_border_pulse) begin
+			oX <= top_border_x;
+			oY <= top_border_y;
+			oColour <= top_border_colour;
+			rendered <= top_border_plot;
+		end
+		else if(draw_bot_border_pulse) begin
+			oX <= bot_border_x;
+			oY <= bot_border_y;
+			oColour <= bot_border_colour;
+			rendered <= bot_border_plot;
 		end
 		// ball handles cleearing the screen as well!
 		else if(clearOld_pulse || drawNew_pulse || cleanScreen_pulse) begin
@@ -257,13 +275,13 @@ module pong_game(
 				control_rend1
 				(iClock, iResetn, iEnable,
 				frameTick, frameCount, 
-				done_background, done_border,
+				done_top_border, done_bot_border,
 				done_clear1, done_draw1, done_clear2, 
 				done_draw2, done_clearOld, done_drawNew, done_cleanScreen,
 				(lhs_scored || rhs_scored), rhs_score_count, lhs_score_count,
 				pulse_clear1, pulse_draw1, pulse_clear2, pulse_draw2,
 				clearOld_pulse, drawNew_pulse, cleanScreen_pulse,
-				draw_background_pulse, draw_border_pulse);
+				draw_top_border_pulse, draw_bot_border_pulse);
 	
 
 	assign oPlot = !rendered;
@@ -302,8 +320,8 @@ module control_render #(
 	input frameTick,
 	input [($clog2(FRAME_RATE)):0] frameCount,
 
-    input done_background,
-	input done_border,
+    input done_top_border,
+	input done_bot_border,
 
 	input done_clearOld1,
 	input done_drawNew1,
@@ -327,8 +345,8 @@ module control_render #(
 	output reg drawNew_pulse_ball,
 	output reg blackScreen_pulse,
 
-    output reg draw_background_pulse,
-    output reg draw_border_pulse
+    output reg draw_top_border_pulse,
+    output reg draw_bot_border_pulse
 );
 
     reg[4:0] current_draw_state, next_draw_state;
@@ -337,11 +355,11 @@ module control_render #(
 	localparam 	
 				S_WAIT =                    5'd0,
                 // BACKGROUND
-                S_BACKGROUND_START =        5'd1,
-                S_BACKGROUND_WAIT =         5'd2,
+                S_BORDER_TOP_START =        5'd1,
+                S_BORDER_TOP_WAIT =         5'd2,
                 // BORDER
-                S_BORDER_START =            5'd3,
-                S_BORDER_WAIT =             5'd4,
+                S_BORDER_BOT_START =        5'd3,
+                S_BORDER_BOT_WAIT =         5'd4,
 
                 // PADDLE 1
     	        S_CLEAROLD_PADDLE1 =        5'd5,
@@ -375,31 +393,29 @@ module control_render #(
 				
 				S_WAIT:begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-		    		else next_draw_state <= (frameTick)?S_BACKGROUND_START:S_WAIT;
+		    		else next_draw_state <= (frameTick)?S_BORDER_TOP_START:S_WAIT;
 				end
                 
                 //Background
-                S_BACKGROUND_START: begin
+                S_BORDER_TOP_START: begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-                    else next_draw_state <= S_BACKGROUND_WAIT;
+                    else next_draw_state <= S_BORDER_TOP_WAIT;
                 end
 
-                S_BACKGROUND_WAIT: begin
+                S_BORDER_TOP_WAIT: begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-                    else begin
-						next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
-                    end
+                    else next_draw_state <= (done_top_border)?S_BORDER_BOT_START:S_BORDER_TOP_WAIT;
                 end
 
                 // BORDER
-                S_BORDER_START: begin
+                S_BORDER_BOT_START: begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-                    else next_draw_state <= S_BORDER_WAIT;
+                    else next_draw_state <= S_BORDER_BOT_WAIT;
                 end
 
-                S_BORDER_WAIT: begin
+                S_BORDER_BOT_WAIT: begin
                     if(scored) next_draw_state <= S_BLACKSCREEN_START;
-                    else next_draw_state <= (done_border)?S_CLEAROLD_PADDLE1:S_BORDER_WAIT;
+                    else next_draw_state <= (done_bot_border)?S_CLEAROLD_PADDLE1:S_BORDER_BOT_WAIT;
                 end
 
 				//Paddle 1
@@ -504,19 +520,19 @@ module control_render #(
         drawNew_pulse_ball <= 0;
         blackScreen_pulse <= 0;
 
-        draw_background_pulse <= 0;
-        draw_border_pulse <= 0;
+        draw_top_border_pulse <= 0;
+        draw_bot_border_pulse <= 0;
 
 		case(current_draw_state)
 
 			// background
-            S_BACKGROUND_WAIT: begin
-                draw_background_pulse <= 1;
+            S_BORDER_TOP_WAIT: begin
+                draw_top_border_pulse <= 1;
             end
             
             // border
-            S_BORDER_WAIT: begin
-                draw_border_pulse <= 1;
+            S_BORDER_BOT_WAIT: begin
+                draw_bot_border_pulse <= 1;
             end
         
             //Paddle 1
@@ -576,17 +592,19 @@ module border_anim
 #(
 parameter 	X_SIZE = 320,
 			Y_SIZE = 30,
-			TRANSPARENT = 3'b000
+			TRANSPARENT = 3'b000,
+			X_SCREEN_PIXELS = 320,
+			Y_SCREEN_PIXELS = 240
 
 )
 (
 	input clk,
 	input resetn,
 	input enable,
-	input [($clog2(X_SIZE)):0] x_orig,
-	input [($clog2(Y_SIZE)):0] y_orig,
-	output reg [($clog2(X_SIZE)):0] pt_x,
-	output reg [($clog2(Y_SIZE)):0] pt_y,
+	input [($clog2(X_SCREEN_PIXELS)):0] x_orig,
+	input [($clog2(Y_SCREEN_PIXELS)):0] y_orig,
+	output reg [($clog2(X_SCREEN_PIXELS)):0] pt_x,
+	output reg [($clog2(Y_SCREEN_PIXELS)):0] pt_y,
 	output reg [2:0] outColour,
 	output reg plot,
 	output reg done
@@ -596,11 +614,9 @@ parameter 	X_SIZE = 320,
 	wire [2:0]pixel_colour;
 	// output the colour of the current pixel on the stored image
 
-	borderRAM borderMemory(
+	border_ROM borderMemory(
 		.address((x_counter + (X_SIZE * y_counter))),
 		.clock(clk),
-		.data(3'd0),
-		.wren(1'd0),
 		.q(pixel_colour)
 	);
 
@@ -623,6 +639,7 @@ parameter 	X_SIZE = 320,
 				pt_x <= x_orig + x_counter;
 				pt_y <= y_orig + y_counter;
 				outColour <= pixel_colour;
+				
 				if(pixel_colour == TRANSPARENT) begin
 					// DO NOT DRAW THIS PIXEL!
 					plot <= 0;
@@ -631,22 +648,27 @@ parameter 	X_SIZE = 320,
 					plot <= 1;
 				end
 
-				if(y_counter == Y_SIZE - 1 && x_counter == X_SIZE - 1) begin
+				if(y_counter == Y_SIZE && x_counter == X_SIZE) begin
 					// done counting the box, send pulse
-					x_counter <= 'd0;
-					y_counter <= 'd0;
+					x_counter <= 0;
+					y_counter <= 0;
 					done <= 1;
 				end
-				else if(x_counter < X_SIZE - 1) begin
+				else if(x_counter < X_SIZE) begin
 					// just count normally if we already started
 					x_counter <= x_counter + 1;
 					done <= 0;
 				end 
-				else begin
+				else if(y_counter < Y_SIZE)begin
 					// completed row, go to new row and start on left
 					x_counter <= 'd0;
 					y_counter <= y_counter + 1;
 					done <= 0;
+				end
+				else begin
+					x_counter <= 0;
+					y_counter <= 0;
+					done <= 1;
 				end
 			end
 			else begin
@@ -846,7 +868,6 @@ module drawBox_signal
 					x_counter <= 0;
 					y_counter <= 0;
 					done <= 1;
-				
 				end
 				
 				

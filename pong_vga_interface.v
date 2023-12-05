@@ -91,8 +91,8 @@ module pong_vga_interface
 	// Internal Wires
 	wire		[7:0]	ps2_key_data;
 	wire				ps2_key_pressed;
-	wire           send_command;
-	reg	[7:0]	last_data_received;
+	wire           		send_command;
+	reg	[7:0]			last_data_received;
 	
 	//Keyboard input
 	reg iUp, iDown;
@@ -158,7 +158,7 @@ module pong_vga_interface
 		defparam VGA.RESOLUTION = "320x240";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-		defparam VGA.BACKGROUND_IMAGE = "black.mif"; //test image loaded, was black.mif
+		defparam VGA.BACKGROUND_IMAGE = "stars_colour.mif"; //test image loaded, was black.mif
 	// Put your code here. Your code should produce signals x,y,colour and writeEn
 	// for the VGA controller, in addition to any other functionality your design may require.
 	

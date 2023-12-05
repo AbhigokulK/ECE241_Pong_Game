@@ -413,13 +413,22 @@ module ball_render
 	// registers for cleaning the screen
 	wire [($clog2(SCREEN_X)):0] blk_x;
 	wire [($clog2(SCREEN_Y)):0] blk_y;
+	wire [2:0] back_col;
+	wire[16:0] address = (blk_x + (320 * blk_y));
+
+	// change name based on the ROM image you want...
+	stars_1_ROM backgroundA(
+		address,
+		clk,
+		back_col
+	);
 
 	always@(posedge clk) begin   
 		// Active Low Synchronous Reset
 		if(!resetn) begin
 			render_x <= blk_x;
 			render_y <= blk_y;
-			col_out <= 3'd0;
+			col_out <= 3'b000;
 			
 			rendered <= 0;
 			// clear and drawing counters reset in their modules
@@ -451,7 +460,7 @@ module ball_render
 					// has to be outputting the clean screen points
 					render_x <= blk_x;
 					render_y <= blk_y;
-					col_out <= 3'b000;
+					col_out <= back_col;
 					rendered <= 0;
 				end
 				else begin
