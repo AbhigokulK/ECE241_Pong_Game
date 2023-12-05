@@ -424,6 +424,15 @@ module ball_render
 		back_col
 	);
 
+	wire [16:0] redraw_address = (pt_clear_x + (320*pt_clear_y));
+	wire [2:0] redraw_col;
+
+	stars_hexROM redrawBack(
+		redraw_address,
+		clk,
+		redraw_col
+	);
+
 
 	always@(posedge clk) begin   
 		// Active Low Synchronous Reset
@@ -448,7 +457,7 @@ module ball_render
 					// output the clearOld points
 					render_x <= pt_clear_x;
 					render_y <= pt_clear_y;
-					col_out <= 3'b000;
+					col_out <= redraw_col;
 					rendered <= 0;
 				end
 				else if(drawNew_pulse) begin
@@ -462,7 +471,7 @@ module ball_render
 					// has to be outputting the clean screen points
 					render_x <= blk_x;
 					render_y <= blk_y;
-					col_out <= 3'b000;
+					col_out <= back_col;
 					rendered <= 0;
 				end
 				else begin

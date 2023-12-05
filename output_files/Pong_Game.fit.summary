@@ -1,16 +1,16 @@
-Fitter Status : Successful - Mon Dec 04 14:31:40 2023
+Fitter Status : Successful - Mon Dec 04 15:47:40 2023
 Quartus Prime Version : 18.0.0 Build 614 04/24/2018 SJ Lite Edition
 Revision Name : Pong_Game
 Top-level Entity Name : pong_vga_interface
 Family : Cyclone V
 Device : 5CSEMA5F31C6
 Timing Models : Final
-Logic utilization (in ALMs) : 597 / 32,070 ( 2 % )
-Total registers : 675
+Logic utilization (in ALMs) : 644 / 32,070 ( 2 % )
+Total registers : 689
 Total pins : 98 / 457 ( 21 % )
 Total virtual pins : 0
-Total block memory bits : 236,544 / 4,065,280 ( 6 % )
-Total RAM Blocks : 31 / 397 ( 8 % )
+Total block memory bits : 697,344 / 4,065,280 ( 17 % )
+Total RAM Blocks : 89 / 397 ( 22 % )
 Total DSP Blocks : 0 / 87 ( 0 % )
 Total HSSI RX PCSs : 0
 Total HSSI PMA RX Deserializers : 0

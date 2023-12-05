@@ -392,18 +392,18 @@ module control_render #(
 			case(current_draw_state)
 				
 				S_WAIT:begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 		    		else next_draw_state <= (frameTick)?S_BACKGROUND_START:S_WAIT;
 				end
                 
                 //Background
                 S_BACKGROUND_START: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= S_BACKGROUND_WAIT;
                 end
 
                 S_BACKGROUND_WAIT: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else begin
 						next_draw_state <= (done_background)?S_BORDER_START:S_BACKGROUND_WAIT;
                     end
@@ -411,74 +411,74 @@ module control_render #(
 
                 // BORDER
                 S_BORDER_START: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= S_BORDER_WAIT;
                 end
 
                 S_BORDER_WAIT: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= (done_border)?S_CLEAROLD_PADDLE1:S_BORDER_WAIT;
                 end
 
 				//Paddle 1
 				S_CLEAROLD_PADDLE1: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                 	else next_draw_state <= S_CLEAROLD_PADDLE1_WAIT;
 				end
 				S_CLEAROLD_PADDLE1_WAIT: begin
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= (done_clearOld1)?S_DRAWNEW_PADDLE1:S_CLEAROLD_PADDLE1_WAIT;
 				end
 				S_DRAWNEW_PADDLE1: begin
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= S_DRAWNEW_PADDLE1_WAIT;
 				end
 				S_DRAWNEW_PADDLE1_WAIT: begin
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= (done_drawNew1)?S_CLEAROLD_PADDLE2:S_DRAWNEW_PADDLE1_WAIT;
 				end
 
 				//Paddle 2
 				S_CLEAROLD_PADDLE2: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					else next_draw_state <= S_CLEAROLD_PADDLE2_WAIT;
 				end
 				S_CLEAROLD_PADDLE2_WAIT: begin
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= (done_clearOld2)?S_DRAWNEW_PADDLE2:S_CLEAROLD_PADDLE2_WAIT;
 				end
 				S_DRAWNEW_PADDLE2: begin
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
                     else next_draw_state <= S_DRAWNEW_PADDLE2_WAIT;
 				end
 				S_DRAWNEW_PADDLE2_WAIT: begin
-                    if(scored) next_draw_state <= S_BACKGROUND_START;
+                    if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					else next_draw_state <= (done_drawNew2)?S_CLEAROLD_BALL_START:S_DRAWNEW_PADDLE2_WAIT;
 				end
 
                 // BALL
                 S_CLEAROLD_BALL_START: begin
 					// set up pulse to kickstart clear old module
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					else next_draw_state <= S_CLEAROLD_BALL_WAIT;
 				end
 				S_CLEAROLD_BALL_WAIT: begin
 					// set the pulse to 0, and only go next when the done signal is given
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					// while clearing, keep clearing until it is done
 					else next_draw_state <= (done_clearOld_ball)?S_DRAWNEW_BALL_START:S_CLEAROLD_BALL_WAIT;
 				end
 
 				S_DRAWNEW_BALL_START: begin
 					// set up pulse to kickstart the draw new module
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					// start drawing asap
 					else next_draw_state <= S_DRAWNEW_BALL_WAIT;
 				end
 
 				S_DRAWNEW_BALL_WAIT: begin
 					// set the pulse to 0, and only go next when the done signal is given
-					if(scored) next_draw_state <= S_BACKGROUND_START;
+					if(scored) next_draw_state <= S_BACKGROUND_WAIT;
 					// keep drawing until it is done. if it is done, go back to waiting till next frame and clear old
 					else next_draw_state <= (done_drawNew_ball)?S_WAIT:S_DRAWNEW_BALL_WAIT;
 				end
@@ -693,11 +693,9 @@ parameter 	X_SIZE = 320,
 	wire [2:0]pixel_colour;
 	// output the colour of the current pixel on the stored image
 
-	borderRAM borderMemory(
+	border_ROM borderMemory(
 		.address((x_counter + (X_SIZE * y_counter))),
 		.clock(clk),
-		.data(3'd0),
-		.wren(1'd0),
 		.q(pixel_colour)
 	);
 
