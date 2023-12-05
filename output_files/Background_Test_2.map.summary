@@ -1,12 +1,17 @@
-Analysis & Synthesis Status : Failed - Mon Dec 04 21:35:51 2023
+Analysis & Synthesis Status : Successful - Mon Dec 04 21:39:20 2023
 Quartus Prime Version : 18.0.0 Build 614 04/24/2018 SJ Lite Edition
 Revision Name : Background_Test_2
-Top-level Entity Name : Background_Test_2
+Top-level Entity Name : pong_vga_interface
 Family : Cyclone V
-Logic utilization (in ALMs) : N/A until Partition Merge
-Total registers : N/A until Partition Merge
-Total pins : N/A until Partition Merge
-Total virtual pins : N/A until Partition Merge
-Total block memory bits : N/A until Partition Merge
-Total PLLs : N/A until Partition Merge
-Total DLLs : N/A until Partition Merge
+Logic utilization (in ALMs) : N/A
+Total registers : 656
+Total pins : 98
+Total virtual pins : 0
+Total block memory bits : 466,944
+Total DSP Blocks : 0
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 1
+Total DLLs : 0
